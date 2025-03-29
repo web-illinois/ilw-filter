@@ -1,7 +1,7 @@
 {
-    "name": "@illinois-toolkit/<%= name %>",
+    "name": "@illinois-toolkit/ilw-filter",
     "description": "One paragraph description of the component.",
-    "repository": "github:<%= repository %>",
+    "repository": "github:web-illinois/ilw-filter",
     "private": false,
     "license": "MIT",
     "version": "0.0.1",
@@ -13,16 +13,16 @@
     ],
     "exports": {
         ".": {
-            "import": "./dist/<%= name %>.js",
-            "require": "./dist/<%= name %>.cjs",
-            "default": "./dist/<%= name %>.js"
+            "import": "./dist/ilw-filter.js",
+            "require": "./dist/ilw-filter.cjs",
+            "default": "./dist/ilw-filter.js"
         },
-        "./<%= name %>.css": {
-            "import": "./dist/<%= name %>.css"
+        "./ilw-filter.css": {
+            "import": "./dist/ilw-filter.css"
         }
     },
-    "main": "./dist/<%= name %>.js",
-    "module": "./dist/<%= name %>.js",
+    "main": "./dist/ilw-filter.js",
+    "module": "./dist/ilw-filter.js",
     "scripts": {
         "dev": "vite",
         "build": "tsc --noEmit && vite build --config vite.transpile.config.ts --emptyOutDir && vite build --config vite.build.config.ts --emptyOutDir",
