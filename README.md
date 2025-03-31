@@ -34,6 +34,9 @@ The keys of the object are the names of filters provided through the filter subc
 value being the current value of that filter. The value can be a string, number, boolean, array, or object,
 depending on the configuration of the filter.
 
+There is also a custom `filters` event dispatched on the `ilw-filter` element when the filters change, which
+includes the same filters object for systems that don't work with reactive attributes as easily.
+
 ## Code Examples
 
 ```html
