@@ -11,7 +11,30 @@
 </head>
 
 <body style="margin: 0; padding: 0;">
-<ilw-filter></ilw-filter>
+<ilw-filter filters='{"department":"Educational Psychology"}'>
+    <h2 slot="heading">Filter by</h2>
+    <ilw-filter-item
+            name="department"
+            label="Department"
+            type="select"
+            options='["", "Educational Psychology", "Special Education", "Curriculum and Instruction"]'></ilw-filter-item>
+    <ilw-filter-item
+            name="alphabet"
+            label="A to Z"
+            type="grid"
+            options='["A", "B", "C", "D", "E", "F", "G", "H"]'></ilw-filter-item>
+    <ilw-filter-item
+            name="search"
+            label="Search"
+            placeholder="search by name or keyword"
+            type="search"></ilw-filter-item>
+    <ilw-filter-item
+            name="context"
+            type="hidden"
+            value="hidden input value"></ilw-filter-item>
+    <ilw-filter-button type="submit"></ilw-filter-button>
+    <ilw-filter-button type="reset"></ilw-filter-button>
+</ilw-filter>
 </body>
 
 </html>

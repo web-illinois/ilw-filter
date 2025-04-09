@@ -9,6 +9,10 @@ Links: **[ilw-filter in Builder](https://builder3.toolkit.illinois.edu/component
 Container for filter controls that holds a series of filters. Each filter is a separate component,
 and this component manages the layout and logic of the filters.
 
+## Attributes
+
+### `ilw-filter`
+
 Each filter component added under this component is registered automatically. You can register additional
 filter components in other parts of the page by passing a list of element IDs to the `register` attribute.
 
@@ -16,7 +20,33 @@ Other attributes that are available on this component include:
 
 - `compact` applies a compact style to the filter container.
 
-### Submission
+### `ilw-filter-item`
+
+This component is used to create a form control for a specific value to filter results by. A working
+filter is built from `ilw-filter` with one or more `ilw-filter-item` components.
+
+- `name` Required. The key for the item. This is used to identify the filter in the filters object.
+- `label` Required. The label for the item.
+- `type` Required. The type of the item. This determines the type of input that is rendered.
+- `value` The value for the filter. This is reactive, so if the value changes, the filter will update.
+ 
+Type-specific attributes:
+- `options` A JSON list or object of options for select and grid types. This is required for those types.
+  - If the value is a list, the string is both the key and the name of the option.
+  - If the value is an object, the key is the name of the option and the value is the display name.
+- `placeholder` The placeholder text for text-style inputs.
+
+### `ilw-filter-button`
+
+A component that renders a button for the filter. Typically, at least a submit button is required for
+accessibility.
+
+- `type` Required. The type of button.
+  - `submit` A button that submits or applies the filters.
+  - `reset` A reset button that removes all values from the `filters` object. A custom reset
+    can be implemented by just setting the value of the `filters` attribute.
+
+## Submission
 
 Because the filters are a type of form, it must be possible for it to be submitted in two ways:
 
@@ -25,7 +55,7 @@ Because the filters are a type of form, it must be possible for it to be submitt
 
 In either case, there is a `submit` event that is dispatched on the `ilw-filter` element.
 
-### Filters Attribute
+## Filters Attribute
 
 The current state of all filters is provided through the `filters` attribute, and is fully reactive. It
 uses Lit's built-in object converter, so the attribute value should be a JSON string.
@@ -43,31 +73,32 @@ includes the same filters object for systems that don't work with reactive attri
 <ilw-filter filters='{"department":"Educational Psychology"}'>
     <h2 slot="heading">Filter by</h2>
     <ilw-filter-item
-        name="department"
-        label="Department"
-        type="select"
-        options='["Educational Psychology", "Special Education", "Curriculum and Instruction"]' />
+            name="department"
+            label="Department"
+            type="select"
+            options='["", "Educational Psychology", "Special Education", "Curriculum and Instruction"]'></ilw-filter-item>
     <ilw-filter-item
-        name="alphabet"
-        type="alphabet" />
+            name="alphabet"
+            label="A to Z"
+            type="grid"
+            options='["A", "B", "C", "D", "E", "F", "G", "H"]'></ilw-filter-item>
     <ilw-filter-item
-        name="search"
-        label="search by name or keyword"
-        type="search" />
-    <ilw-filter-button type="submit" primary />
-    <ilw-filter-button type="reset" />
+            name="search"
+            label="Search"
+            placeholder="search by name or keyword"
+            type="search"></ilw-filter-item>
+    <ilw-filter-item
+            name="context"
+            type="hidden"
+            value="hidden input value"></ilw-filter-item>
+    <ilw-filter-button type="submit"></ilw-filter-button>
+    <ilw-filter-button type="reset"></ilw-filter-button>
 </ilw-filter>
 ```
 
-## Accessibility Notes and Use
+## Accessibility Notes
 
-Consider accessibility, both for building the component and for its use:
-
-- Is there sufficient color contrast?
-- Can the component be fully understood without colors?
-- Does the component need alt text or ARIA roles?
-- Can the component be navigated with a keyboard? Is the tab order correct?
-- Are focusable elements interactive, and interactive elements focusable?
-- Are form fields, figures, fieldsets and other interactive elements labelled?
+- Always use a heading element in the `slot="heading"` to provide an accessible label for the filter container.
+- Use accessible labels for the filter items that are easy to understand.
 
 ## External References
