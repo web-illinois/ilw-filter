@@ -6,34 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Filter Component</title>
     <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
-    <link rel="stylesheet" href="https://dev.toolkit.illinois.edu/ilw-global/3.0.0-alpha/ilw-global.css">
+    <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-global/3/ilw-global.css">
     <script type="module" src="/src/ilw-filter.ts"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
 <ilw-filter filters='{"department":"Educational Psychology"}'>
     <h2 slot="heading">Filter by</h2>
-    <ilw-filter-item
-            name="department"
-            label="Department"
-            type="select"
-            options='["", "Educational Psychology", "Special Education", "Curriculum and Instruction"]'></ilw-filter-item>
-    <ilw-filter-item
-            name="alphabet"
-            label="A to Z"
-            type="grid"
-            options='["A", "B", "C", "D", "E", "F", "G", "H"]'></ilw-filter-item>
-    <ilw-filter-item
-            name="search"
-            label="Search"
-            placeholder="search by name or keyword"
-            type="search"></ilw-filter-item>
-    <ilw-filter-item
-            name="context"
-            type="hidden"
-            value="hidden input value"></ilw-filter-item>
-    <ilw-filter-button type="submit"></ilw-filter-button>
-    <ilw-filter-button type="reset"></ilw-filter-button>
+    <ilw-filter-search
+        label="Dep"
+        placeholder="Search for a department"
+        name="department">
+    </ilw-filter-search>
+    <ilw-filter-search
+        label="Course"
+        placeholder="Search for a course"
+        name="course">
+    </ilw-filter-search>
 </ilw-filter>
 </body>
 
