@@ -1,4 +1,4 @@
-import { html, unsafeCSS } from "lit";
+import { LitElement, html, unsafeCSS } from "lit";
 // @ts-ignore
 import styles from "./FilterSearch.styles.css?inline";
 import { customElement, property } from "lit/decorators.js";
@@ -8,9 +8,6 @@ import { FilterItem } from "./FilterItem";
 export default class FilterSearch extends FilterItem<string> {
     @property()
     placeholder = "";
-
-    @property({ reflect: true, useDefault: true })
-    value: string | undefined = undefined;
 
     static get styles() {
         return unsafeCSS(styles);
@@ -22,19 +19,20 @@ export default class FilterSearch extends FilterItem<string> {
 
     valueUpdateListener = (event: Event) => {
         const target = event.target as HTMLInputElement;
-        this.setValue(target.value);
+        this.value = target.value;
+        this.context!.itemUpdated(this.name, this.value);
     };
 
     render() {
         return html`
             <div>
-                <label for=${this.id}>${this.label}</label>
+                <label for=${this.name}>${this.label}</label>
                 <input
-                    id=${this.id}
+                    id=${this.name}
                     type="search"
-                    placeholder=${this.placeholder}
+                    placeholder="Search..."
                     name=${this.name}
-                    @input=${this.valueUpdateListener}
+                    @change=${this.valueUpdateListener}
                     value=${this.value}
                 />
             </div>
