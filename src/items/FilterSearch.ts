@@ -19,20 +19,19 @@ export default class FilterSearch extends FilterItem<string> {
 
     valueUpdateListener = (event: Event) => {
         const target = event.target as HTMLInputElement;
-        this.value = target.value;
-        this.context!.itemUpdated(this.name, this.value);
+        this.setValue(target.value);
     };
 
     render() {
         return html`
             <div>
-                <label for=${this.name}>${this.label}</label>
+                <label for=${this.id}>${this.label}</label>
                 <input
-                    id=${this.name}
+                    id=${this.id}
                     type="search"
-                    placeholder="Search..."
+                    placeholder=${this.placeholder}
                     name=${this.name}
-                    @change=${this.valueUpdateListener}
+                    @input=${this.valueUpdateListener}
                     value=${this.value}
                 />
             </div>

@@ -11,7 +11,7 @@
 </head>
 
 <body style="margin: 0; padding: 0;">
-<ilw-filter filters='{"department":"Educational Psychology"}'>
+<ilw-filter filters='{"department":"Educational Psychology"}' register='["external-filter"]'>
     <h2 slot="heading">Filter by</h2>
     <ilw-filter-search
         label="Dep"
@@ -23,7 +23,50 @@
         placeholder="Search for a course"
         name="course">
     </ilw-filter-search>
+    <ilw-filter-hidden name="hide" value="test">
+
+    </ilw-filter-hidden>
 </ilw-filter>
+
+<div>
+
+    <ilw-filter-search
+            id="external-filter"
+            label="External"
+            placeholder="This one is outside the filter"
+            name="external">
+    </ilw-filter-search>
+</div>
+
+<script>
+    const filter = document.querySelector('ilw-filter');
+    const search = document.querySelector('ilw-filter-search');
+    const hidden = document.querySelector('ilw-filter-hidden');
+
+    // Use a mutation observer to detect changes to the filter
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            /**
+             *
+             * @type {HTMLElement}
+             */
+            const target = mutation.target;
+            console.log('Filter changed:', target.getAttribute('filters'));
+        });
+    });
+    observer.observe(filter, {
+        attributeFilter: ['filters']
+    });
+
+    setTimeout(() => {
+        // Set the filter to a new value
+        filter.setAttribute("filters", JSON.stringify({
+            department: 'Special Education',
+            course: '599'
+        }));
+    }, 2000);
+
+</script>
 </body>
 
 </html>
