@@ -9,9 +9,15 @@ export default class FilterHidden extends FilterItem<string> {
         super();
     }
 
+    valueUpdateListener = (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        this.setValue(target.value);
+    };
+
     render() {
         return html`
-            <input type="hidden" name=${this.name} value=${this.value} />
+            <input type="hidden" name=${this.name} value=${this.value}
+                   @change=${this.valueUpdateListener} />
         `;
     }
 }
