@@ -10,7 +10,7 @@ import { FilterItem } from "./items/FilterItem";
 @customElement("ilw-filter")
 export default class Filter extends LitElement {
     @provide({ context: filterContext })
-    private context = new FilterContext();
+    context = new FilterContext();
 
     @property({ reflect: true })
     filters = "{}";
@@ -44,7 +44,8 @@ export default class Filter extends LitElement {
     }
 
     protected itemUpdateListener = () => {
-        const jsonValue = JSON.stringify(this.context.getValues());
+        const values = this.context.getValues();
+        const jsonValue = JSON.stringify(values);
         if (this.filters !== jsonValue) {
             this.context.debug(
                 "Filter itemUpdateListener",
@@ -54,9 +55,8 @@ export default class Filter extends LitElement {
             this.filters = jsonValue;
             this.dispatchEvent(
                 new CustomEvent("filters", {
-                    detail: this.filters,
-                    composed: true,
-                }),
+                    detail: values
+                })
             );
         }
     };
@@ -126,7 +126,10 @@ export default class Filter extends LitElement {
     render() {
         return html`
             <div>
-                <form>
+                <form id="ilw-filter-form" role="search" aria-labelledby="ilw-search-heading">
+                    <div id="ilw-search-heading">
+                        <slot name="heading"></slot>
+                    </div>
                     <slot></slot>
                 </form>
             </div>
