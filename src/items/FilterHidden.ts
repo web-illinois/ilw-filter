@@ -1,9 +1,11 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { FilterItem } from "./FilterItem";
 
 @customElement("ilw-filter-hidden")
 export default class FilterHidden extends FilterItem<string> {
+    @property({ reflect: true, useDefault: true })
+    value: string | undefined = undefined;
 
     constructor() {
         super();
@@ -16,8 +18,12 @@ export default class FilterHidden extends FilterItem<string> {
 
     render() {
         return html`
-            <input type="hidden" name=${this.name} value=${this.value}
-                   @change=${this.valueUpdateListener} />
+            <input
+                type="hidden"
+                name=${this.name}
+                value=${this.value}
+                @change=${this.valueUpdateListener}
+            />
         `;
     }
 }
