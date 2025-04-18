@@ -1,5 +1,5 @@
-import { LitElement, html, unsafeCSS } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement } from "lit";
+import { property } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { FilterContext, filterContext } from "../FilterContext";
 
@@ -18,10 +18,18 @@ export abstract class FilterItem<
     @property()
     label = "";
 
-    @property()
-    value: T | undefined = undefined;
+    /**
+     * When true, the value of this filter will be synced with the URL.
+     */
+    @property({ type: Boolean })
+    query = false;
 
-    @consume({context: filterContext})
+    /**
+     * Value property that should be implemented by subclasses.
+     */
+    abstract value: T | undefined;
+
+    @consume({ context: filterContext })
     public context?: FilterContext;
 
     /**
@@ -52,6 +60,23 @@ export abstract class FilterItem<
         this.value = value;
         if (this.appliedContext) {
             this.appliedContext.itemUpdated(this.name, value);
+
+            if (this.query) {
+                // Update the browser URL with the new value by replacing
+                // history. The timeout is needed to allow the value attribute
+                // to be converted
+                setTimeout(() => {
+                    const params = new URLSearchParams(window.location.search);
+                    const queryValue = this.getAttribute("value");
+                    if (queryValue) {
+                        params.set(this.name, queryValue);
+                    } else {
+                        params.delete(this.name);
+                    }
+                    const newUrl = `${window.location.pathname}?${params.toString()}`;
+                    window.history.replaceState({}, "", newUrl);
+                }, 1);
+            }
         } else {
             console.warn(
                 "FilterItem: No context connected, cannot update value.",
@@ -63,10 +88,24 @@ export abstract class FilterItem<
     connect(context: FilterContext) {
         this.appliedContext = context;
         context.register(this);
-        let value = context.get(this.name)
-        context.debug("FilterItem connected", this.tagName, "-", this.name, ":", value);
-        if (value !== undefined) {
+        let value = context.get(this.name);
+        context.debug(
+            "FilterItem connected",
+            this.tagName,
+            "-",
+            this.name,
+            ":",
+            value,
+        );
+        if (value || value === 0) {
             this.value = value;
+        } else if (this.query) {
+            const params = new URLSearchParams(window.location.search);
+            const queryValue = params.get(this.name);
+            if (queryValue) {
+                this.setAttribute("value", queryValue);
+                context.itemUpdated(this.name, this.value);
+            }
         }
     }
 

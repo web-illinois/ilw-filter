@@ -20,12 +20,19 @@
     </ilw-filter-search>
     <ilw-filter-search
         label="Course"
+        query
         placeholder="Search for a course"
         name="course">
     </ilw-filter-search>
     <ilw-filter-hidden name="hide" value="test">
 
     </ilw-filter-hidden>
+    <ilw-filter-multi label="Multi" name="multi" query>
+
+    </ilw-filter-multi>
+    <ilw-filter-list label="List" name="list" query>
+
+    </ilw-filter-list>
 </ilw-filter>
 
 <div>
@@ -62,7 +69,8 @@
         // Set the filter to a new value
         filter.setAttribute("filters", JSON.stringify({
             department: 'Special Education',
-            course: '599'
+            course: '599',
+            multi: {a: 'ping', b: 'pong'},
         }));
     }, 2000);
 

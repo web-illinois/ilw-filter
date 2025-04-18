@@ -56,8 +56,9 @@ export class FilterContext extends EventTarget {
     register(item: FilterItem<any>) {
         if (this.items.has(item.name)) {
             console.warn(
-                `ilw-filter: Item with name ${item.name} already registered, overwriting.`,
+                `ilw-filter: Item with name ${item.name} already registered, ignoring.`,
             );
+            return;
         }
         this.items.set(item.name, item);
         if (item.value !== undefined && this.values.get(item.name) === undefined) {
@@ -106,6 +107,7 @@ export class FilterContext extends EventTarget {
             }
         }
 
+        const params = new URLSearchParams(window.location.search);
         // Remove any values that don't exist in the new filters.
         for (const name of this.values.keys()) {
             if (!filters.hasOwnProperty(name)) {
@@ -113,9 +115,15 @@ export class FilterContext extends EventTarget {
                 const item = this.items.get(name);
                 if (item) {
                     item.value = undefined;
+                    if (item.query) {
+                        // Remove the query parameter from the URL.
+                        params.delete(name);
+                    }
                 }
             }
         }
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, "", newUrl);
     }
 
     protected dispatchItemUpdate = debounce(() => {
