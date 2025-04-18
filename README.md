@@ -32,6 +32,8 @@ All filter components have the following attributes:
 - `name` Required. The key for the item. This is used to identify the filter in the filters object.
 - `label` Required. The label for the item.
 - `value` The value for the filter. This is reactive, so if the value changes, the filter will update.
+- `query` A boolean that makes the filter item use a value from the query string. The URL is also
+  updated when the filter changes.
  
 Type-specific attributes:
 - `options` A JSON list or object of options for select and grid types. This is required for those types.
