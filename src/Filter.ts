@@ -35,6 +35,9 @@ export default class Filter extends LitElement {
     })
     register: string[] = [];
 
+    @property({ type: Boolean })
+    toggle = false;
+
     static get styles() {
         return unsafeCSS(styles);
     }
@@ -123,6 +126,27 @@ export default class Filter extends LitElement {
         }
     }
 
+    toggleListener = () => {
+        let checked = <HTMLInputElement>this.shadowRoot?.querySelector('.slider input');
+        this.querySelectorAll("ilw-filter-checkboxessimple").forEach((panel) => {
+            checked.checked ? panel.expand() : panel.collapse();
+        });
+    };
+
+    toggleResetAll() {
+        window.location.href = window.location.origin + window.location.pathname;
+    }
+
+    renderToggle() {
+        return html`<div class="slider">
+                    <input type="checkbox" role="switch" @input=${this.toggleListener}><span>
+                        <span class="container"></span>
+                        <span aria-hidden="true" class="text-on">Collapse All</span>
+                        <span aria-hidden="true" class="text-off">Expand All</span></span>
+                </div>`
+    }
+
+
     render() {
         return html`
             <div class="parent">
@@ -130,8 +154,12 @@ export default class Filter extends LitElement {
                     <div id="ilw-search-heading">
                         <slot name="heading"></slot>
                     </div>
+                    ${this.toggle ? this.renderToggle() : ''}
                     <slot></slot>
                 </form>
+                <button class="ilw-button" @click=${this.toggleResetAll}>
+                    Reset All
+                </button>
             </div>
         `;
     }

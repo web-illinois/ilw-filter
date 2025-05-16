@@ -28,3 +28,96 @@ div.parent #ilw-search-heading ::slotted(*) {
   margin: 0;
   padding-bottom: 1.25rem;
 }
+
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 24px;
+}
+
+.slider input[type="checkbox"] {
+  z-index: 10;
+  position: relative;
+  color: transparent;
+  width: 60px;
+  height: 24px;
+  background: transparent;
+  border: transparent;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.slider > span .container {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--il-storm-lighter-1);
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider > span .container:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 6px;
+  bottom: 2px;
+  background-color: #FFF;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.slider input:checked + span .container {
+  background-color: var(--il-altgeld);
+}
+
+.slider input:checked + span .container:before {
+  transform: translateX(30px);
+}
+
+.slider input:focus + span span {
+  outline: 3px solid var(--il-blue);
+}
+
+
+.slider > span .text-on, .slider > span .text-off {
+  left: 70px;
+  right: 0;
+  bottom: 0;
+  color: var(--il-blue);
+  font: normal 400 1.25rem / 1.5rem var(--il-font-sans);
+  margin: 0;
+  width: 100px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider > span .text-on {
+  display: none;
+  position: absolute;
+}
+
+.slider > span .text-off {
+  display: flex;
+  position: absolute;
+}
+
+.slider > input:checked + span .text-on {
+  display: flex;
+}
+
+.slider > input:checked + span .text-off {
+  display: none;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .slider span, .slider span:before {
+    transition: none;
+  }
+}
