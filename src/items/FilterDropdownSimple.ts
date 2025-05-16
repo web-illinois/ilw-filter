@@ -1,6 +1,6 @@
 import { html, unsafeCSS } from "lit";
 // @ts-ignore
-import styles from "./FilterSearch.styles.css?inline";
+import styles from "./FilterDropdownSimple.styles.css?inline";
 import { customElement, property } from "lit/decorators.js";
 import {ifDefined} from 'lit/directives/if-defined.js';
 import { FilterItem } from "./FilterItem";
@@ -53,9 +53,25 @@ export default class FilterDropdownSimple extends FilterItem<string> {
         this.setValue(target.value);
     };
 
+    renderToggle(textitem: string, i: number) {
+        let isChecked = this.value?.includes(textitem);
+        return html`
+            <div class="checkbox">
+            <input
+                type="checkbox"
+                id="${this.id + i}"
+                value="${textitem}"
+                @input=${this.valueUpdateListener}
+                ?checked=${isChecked}
+            />
+            <label for="${this.id + i}">${textitem}</label>
+            </div>
+        `;
+    }
+
     render() {
         return html`
-            <div>
+            <div class="dropdown">
                 <label for=${this.id}>${this.label}</label>
                 <select
                     id=${this.id}

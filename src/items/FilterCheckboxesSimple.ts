@@ -64,6 +64,20 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
         super();
     }
 
+    collapse() {
+        let detail = this.shadowRoot?.querySelector('details');
+        if (detail) {
+            detail.removeAttribute("open");
+        }
+    }
+
+    expand() {
+        let detail = this.shadowRoot?.querySelector('details');
+        if (detail) {
+            detail.setAttribute("open", "open");
+        }
+    }
+
     valueUpdateListener = () => {
         let arr: string[] = [];
         Array.from(this.inputs.values()).forEach(element => {
@@ -77,7 +91,7 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     renderCheckbox(textitem: string, i: number) {
         let isChecked = this.value?.includes(textitem);
         return html`
-            <label for="${this.id + i}">${textitem}</label>
+            <div class="checkbox">
             <input
                 type="checkbox"
                 id="${this.id + i}"
@@ -85,6 +99,8 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
                 @input=${this.valueUpdateListener}
                 ?checked=${isChecked}
             />
+            <label for="${this.id + i}">${textitem}</label>
+            </div>
         `;
     }
 

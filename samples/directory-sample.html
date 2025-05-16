@@ -11,16 +11,13 @@
 </head>
 
 <body style="margin: 0; padding: 0;">
-<ilw-filter>
+<ilw-filter toggle>
     <h2 slot="heading">Filter by</h2>
-    <ilw-filter-search
-        label="Course"
-        query
-        placeholder="Search for a course"
-        name="course">
-    </ilw-filter-search>
-    <ilw-filter-checkboxessimple label="Checkboxes" name="checkboxes" allValues="test1[-]test2[-]test3" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-dropdownsimple label="Dropdown" name="dropdown" placeholder="Select an option" allValues="option1[-]option2[-]option3" query></ilw-filter-dropdownsimple>
+    <ilw-filter-checkboxessimple label="Degree Type" name="degree" allValues="Bachelor's and Minor[-]Undergrad Certification[-]Graduate Certification[-]Master's[-]Doctorate" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-dropdownsimple label="Specific Degree" name="specdegree" placeholder="Select an option" allValues="option1[-]option2[-]option3" query></ilw-filter-dropdownsimple>
+    <ilw-filter-checkboxessimple label="Department" name="checkboxes" allValues="Curriculum & Instruction[-]Education Policy, Organization & Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Format" name="checkboxes" allValues="Online[-]Hybrid[-]On-Campus" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Interest Area" name="checkboxes" allValues="Bilingual[-]Digital Learning[-]Early Childhood[-]Human Resource Development[-]Instructional Design[-]Trauma-Informed Education" query compact></ilw-filter-checkboxessimple>
 </ilw-filter>
 
 </body>
