@@ -25,6 +25,12 @@ export abstract class FilterItem<
     query = false;
 
     /**
+     * Styling value that needs to be implelmented by subclasses.
+     */
+    @property({ type: Boolean })
+    compact = false;
+
+    /**
      * Value property that should be implemented by subclasses.
      */
     abstract value: T | undefined;

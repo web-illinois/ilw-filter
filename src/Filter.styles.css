@@ -1,9 +1,30 @@
 /* Styleable variables are in the base layer so they can be overridden easily */
 @layer base {
     :host {
+        --ilw-filter--width: 466px;
 
     }
 }
 
 :host {
+}
+
+div.parent {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    background: var(--il-storm-lighter-4);
+    padding: 1.875rem 1.25rem;
+    width: var(--ilw-filter--width);
+}
+
+div.parent #ilw-search-heading ::slotted(*) {
+  font-family: var(--il-font-sans);
+  color: var(--il-blue);
+  font-size: 1.8125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 2.1875rem;
+  margin: 0;
+  padding-bottom: 1.25rem;
 }
