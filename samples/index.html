@@ -33,6 +33,9 @@
     <ilw-filter-list label="List" name="list" query>
 
     </ilw-filter-list>
+    <ilw-filter-checkboxes label="Checkboxes" name="checkboxes" allValues="test1[-]test2[-]test3" query>
+
+    </ilw-filter-checkboxes>
 </ilw-filter>
 
 <div>
@@ -71,6 +74,7 @@
             department: 'Special Education',
             course: '599',
             multi: {a: 'ping', b: 'pong'},
+            checkboxes: ['test1', 'test2']
         }));
     }, 2000);
 

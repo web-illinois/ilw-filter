@@ -125,7 +125,7 @@ export default class Filter extends LitElement {
 
     render() {
         return html`
-            <div>
+            <div class="parent">
                 <form id="ilw-filter-form" role="search" aria-labelledby="ilw-search-heading">
                     <div id="ilw-search-heading">
                         <slot name="heading"></slot>
