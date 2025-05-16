@@ -16,19 +16,24 @@ and this component manages the layout and logic of the filters.
 Each filter component added under this component is registered automatically. You can register additional
 filter components in other parts of the page by passing a list of element IDs to the `register` attribute.
 
-Other attributes that are available on this component include:
+All attributes that are available on this component:
 
-- `compact` applies a compact style to the filter container.
+- `filters` Required. The current state of the filters. This is a JSON string that is converted to an object.
+- `register` A JSON list of IDs of other filter components to register.
+- `compact` Applies a compact style to the filter container.
 
-### `ilw-filter-item`
+### `ilw-filter-*`
 
-This component is used to create a form control for a specific value to filter results by. A working
-filter is built from `ilw-filter` with one or more `ilw-filter-item` components.
+These components are used to create form controls for a specific value to filter results by. A working
+filter is built from `ilw-filter` with one or more `ilw-filter-*` components.
+
+All filter components have the following attributes:
 
 - `name` Required. The key for the item. This is used to identify the filter in the filters object.
 - `label` Required. The label for the item.
-- `type` Required. The type of the item. This determines the type of input that is rendered.
 - `value` The value for the filter. This is reactive, so if the value changes, the filter will update.
+- `query` A boolean that makes the filter item use a value from the query string. The URL is also
+  updated when the filter changes.
  
 Type-specific attributes:
 - `options` A JSON list or object of options for select and grid types. This is required for those types.
