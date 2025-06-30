@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filter Component</title>
+    <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
+    <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-global/3/ilw-global.css">
+    <script type="module" src="/src/ilw-filter.ts"></script>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<ilw-filter toggle>
+    <h2 slot="heading">Filter by</h2>
+    <ilw-filter-checkboxessimple label="Degree Type" name="degree" allValues="Bachelor's and Minor[-]Undergrad Certification[-]Graduate Certification[-]Master's[-]Doctorate" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-dropdownsimple label="Specific Degree" name="specdegree" placeholder="Select an option" allValues="option1[-]option2[-]option3" query></ilw-filter-dropdownsimple>
+    <ilw-filter-checkboxessimple label="Department" name="checkboxes" allValues="Curriculum & Instruction[-]Education Policy, Organization & Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Format" name="checkboxes" allValues="Online[-]Hybrid[-]On-Campus" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Interest Area" name="checkboxes" allValues="Bilingual[-]Digital Learning[-]Early Childhood[-]Human Resource Development[-]Instructional Design[-]Trauma-Informed Education" query compact></ilw-filter-checkboxessimple>
+</ilw-filter>
+
+</body>
+
+</html>

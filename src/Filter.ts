@@ -109,6 +109,10 @@ export default class Filter extends LitElement {
             if (filters) {
                 this.context.valueUpdated(filters);
             }
+            const event = new CustomEvent('ilw-filter-update', {bubbles: true, composed: true, detail: {
+                values: filters,
+            }});
+            this.dispatchEvent(event);
         }
         if (_changedProperties.has("register")) {
             this.context.debug("Filter register updated", this.register);
@@ -157,7 +161,7 @@ export default class Filter extends LitElement {
                     ${this.toggle ? this.renderToggle() : ''}
                     <slot></slot>
                 </form>
-                <button class="ilw-button" @click=${this.toggleResetAll}>
+                <button @click=${this.toggleResetAll}>
                     Reset All
                 </button>
             </div>

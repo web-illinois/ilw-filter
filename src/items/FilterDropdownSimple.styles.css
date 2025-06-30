@@ -48,3 +48,14 @@ label {
     font: normal 700 1.125rem / 1.875rem var(--il-font-sans);
     cursor: pointer;
 }
+
+label.hidden {
+    position: absolute !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+}

@@ -11,15 +11,171 @@
 </head>
 
 <body style="margin: 0; padding: 0;">
-<ilw-filter toggle>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filter = document.querySelector('ilw-filter');
+        filter.addEventListener('ilw-filter-update', function(e) { search(e); });
+    });
+
+    function search(e) {
+        let jsonFilters = e.detail.values;
+        let jobTypes = encodeURIComponent(jsonFilters.jobtypes ?? '');
+        let offices = encodeURIComponent(jsonFilters.offices ?? '');
+        let searchQuery = encodeURIComponent(jsonFilters.searchquery ?? '');
+        offices = offices != '' ? offices + '[-]' + encodeURIComponent(jsonFilters.offices2 ?? '') : encodeURIComponent(jsonFilters.offices2 ?? '');
+        offices = offices != '' ? offices + '[-]' + encodeURIComponent(jsonFilters.offices3 ?? '') : encodeURIComponent(jsonFilters.offices3 ?? '');
+        let search = '';
+        var url = `https://directoryapi.wigg.illinois.edu/api/Directory/GetFull/education?q=${searchQuery}&offices=${offices}&jobtypes=${jobTypes}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            }
+        }).then(res => res.json()).then(data => {
+            createDirectory(data.office);
+        });
+    }
+
+    function createDirectory(offices) {
+        var faculty = document.getElementById('faculty-finder');
+        faculty.innerHTML = '';
+        faculty.classList = 'directory';
+
+        let academic = document.createElement('div');
+        let academicTitle = document.createElement('h2');
+        academicTitle.innerText = 'Academic Departments';
+        academic.appendChild(academicTitle);
+
+        let administration = document.createElement('div');
+        let administrationTitle = document.createElement('h2');
+        administrationTitle.innerText = 'Administration';
+        administration.appendChild(administrationTitle);
+
+        let research = document.createElement('div');
+        let researchTitle = document.createElement('h2');
+        researchTitle.innerText = 'Research Centers & Outreach Units';
+        research.appendChild(researchTitle);
+
+        for (var i = 0; i < offices.length; i++) {
+            var details = document.createElement('details');
+            if (offices.length == 1) {
+                details.open = true;
+            }
+            var summary = document.createElement('summary');
+            summary.innerHTML = offices[i].title;
+            details.appendChild(summary);
+
+            let div = document.createElement('div');
+            div.classList = 'unit il-theme-blue';
+            let h3Office = document.createElement('h3');
+            let divOffice = document.createElement('div');
+            divOffice.classList = 'textonly';
+            let divAddress = document.createElement('div');
+            divAddress.classList = 'textonly';
+            let divHours = document.createElement('div');
+            divHours.classList = 'textonly';
+            let divEmail = document.createElement('div');
+
+            if (offices[i].externalUrl != null && offices[i].externalUrl != '')
+                h3Office.innerHTML = `<a href='${offices[i].externalUrl}'>${offices[i].title}</a>`;
+            else
+                h3Office.innerHTML = offices[i].title;
+            if (offices[i].map != null && offices[i].map != '')
+                divOffice.innerHTML = `<a href='${offices[i].map}'>${offices[i].room} ${offices[i].building}</a>`;
+            else if (offices[i].room != null && offices[i].room != '' && offices[i].building != null && offices[i].building != '')
+                divOffice.innerHTML = `${offices[i].room} ${offices[i].building}`;
+            divAddress.innerHTML = offices[i].address;
+            divHours.innerHTML = offices[i].hoursText;
+            if (offices[i].email != null && offices[i].email != '') {
+                divEmail.innerHTML = `<a href='mailto:${offices[i].email}' class='il-button il-theme-white'>${offices[i].email}</a> `;
+            }
+            if (offices[i].phone != null && offices[i].phone != '') {
+                divEmail.innerHTML += ` <a href='tel:${offices[i].phone}' class='il-button il-theme-white'>${offices[i].phone}</a>`;
+            }
+            div.appendChild(h3Office);
+            if (divOffice.innerHTML != '')
+                div.appendChild(divOffice);
+            if (divAddress.innerHTML != '')
+                div.appendChild(divAddress);
+            if (divHours.innerHTML != '')
+                div.appendChild(divHours);
+            if (divEmail.innerHTML != '')
+                div.appendChild(divEmail);
+            details.appendChild(div);
+            let h3People = document.createElement('h3');
+            h3People.innerHTML = 'People';
+            details.appendChild(h3People);
+            var ul = document.createElement('ul');
+            ul.classList.add('il-profilelist-card');
+            ul.classList.add('il-profilelist-small');
+            for (var j = 0; j < offices[i].people.length; j++) {
+                let li = document.createElement('li');
+                li.innerHTML = `<il-clickable-card href="${offices[i].people[j].profileUrl}" /><img src="${offices[i].people[j].imageUrl}" alt="" slot="image"><p class="heading" slot="header">${offices[i].people[j].fullName}</p><div class="faculty-description">${offices[i].people[j].primaryTitle}</div></il-clickable-card>`;
+                ul.appendChild(li);
+            }
+            details.appendChild(ul);
+
+            if (offices[i].officeType == 'Academic')
+                academic.appendChild(details);
+            else if (offices[i].officeType == 'Research' || offices[i].officeType == 'Community Engagement')
+                research.appendChild(details);
+            else if (!(offices[i].officeType == 'Other' || offices[i].officeType.startsWith("Custom")))
+                administration.appendChild(details);
+        }
+
+        if (academic.children.length > 1) {
+            faculty.appendChild(academic);
+        }
+        if (research.children.length > 1) {
+            faculty.appendChild(research);
+        }
+        if (administration.children.length > 1) {
+            faculty.appendChild(administration);
+        }
+    }
+</script>
+
+<style>
+    .ilw-directory-grid {
+        display: grid;
+        grid-template-columns: 500px 1fr;
+        grid-template-rows: 60px 1fr;
+        gap: 1rem;
+    }
+    .ilw-directory-gridoptions {
+        display: flex;
+        column-gap: 23px;
+    }
+   .ilw-directory-gridoptions ilw-filter-dropdownsimple {
+        width: 300px;
+    }
+   .ilw-directory-grid ilw-filter-search {
+        display: block; 
+        padding: 0 1.25rem;
+    }
+
+</style>
+<h1>This is an end-to-end test for the College of Education directory</h1>
+
+<div class="ilw-directory-grid">
+<ilw-filter-search hideLabel="true" id="searchquery" label="Search" placeholder="Search by name or keyword" name="searchquery" query></ilw-filter-search>
+
+<div class="ilw-directory-gridoptions">
+    <ilw-filter-dropdownsimple hideLabel="true" id="displaytype" label="Display Type" name="displaytype" placeholder="Select an option" allValues="View by Office[-]View by Profile[-]View by List" query></ilw-filter-dropdownsimple>
+    <ilw-filter-dropdownsimple hideLabel="true" id="viewperpage" label="View Per Page" name="viewperpage" placeholder="Select an option" allValues="18 per page[-]36 per page[-]All people" query></ilw-filter-dropdownsimple>
+</div>
+
+<ilw-filter toggle register='["searchquery", "displaytype", "viewperpage"]'>
     <h2 slot="heading">Filter by</h2>
-    <ilw-filter-checkboxessimple label="Degree Type" name="degree" allValues="Bachelor's and Minor[-]Undergrad Certification[-]Graduate Certification[-]Master's[-]Doctorate" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-dropdownsimple label="Specific Degree" name="specdegree" placeholder="Select an option" allValues="option1[-]option2[-]option3" query></ilw-filter-dropdownsimple>
-    <ilw-filter-checkboxessimple label="Department" name="checkboxes" allValues="Curriculum & Instruction[-]Education Policy, Organization & Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-checkboxessimple label="Format" name="checkboxes" allValues="Online[-]Hybrid[-]On-Campus" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-checkboxessimple label="Interest Area" name="checkboxes" allValues="Bilingual[-]Digital Learning[-]Early Childhood[-]Human Resource Development[-]Instructional Design[-]Trauma-Informed Education" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Role" name="jobtypes" allValues="Faculty[-]Staff[-]Graduate Student" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Departments" name="offices" allValues="Curriculum & Instruction[-]Education Policy, Organization and Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Research and Outreach Units" name="offices2" allValues="Bureau of Educational Research[-]Center for Culturally Responsive Evaluation and Assessment[-]Center for Education in Small Urban Communities[-]Early Childhood Collective[-]Forum on the Future of Public Education[-]Illinois New Teacher Collaborative[-]Office for Mathematics, Science, & Technology Education[-]Office of Community College Research and Leadership[-]Technology Innovation in Educational Research & Design[-]University Primary School" query compact></ilw-filter-checkboxessimple>
+    <ilw-filter-checkboxessimple label="Administrative Units" name="offices3" allValues="Office of Advancement[-]Marketing and Communications[-]Council on Teacher Education[-]Office of the Dean[-]Special Education" query compact></ilw-filter-checkboxessimple>
 </ilw-filter>
 
+<div id="faculty-finder"></div>
+</div>
 </body>
 
 </html>

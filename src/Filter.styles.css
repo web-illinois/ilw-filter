@@ -116,6 +116,50 @@ div.parent #ilw-search-heading ::slotted(*) {
   display: none;
 }
 
+button {
+    background-color: var(--ilw-button--background-color);
+    color: var(--ilw-button--foreground-color);
+    border: 2px solid var(--ilw-button--border-color);
+    font: 700 1.188rem / 1.25rem var(--il-font-sans);
+    display: inline-block;
+    margin: 6px 0;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0.25em;
+    letter-spacing: .01em;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+button:visited {
+    outline: 0;
+    background-color: var(--ilw-button--background-color);
+    color: var(--ilw-button--foreground-color);
+    border: 2px solid var(--ilw-button--border-color);
+}
+
+button:hover {
+    outline: 0;
+    background-color: var(--ilw-button--focused-background-color);
+    color: var(--ilw-button--focused-foreground-color);
+    border-color: var(--ilw-button--focused-border-color);
+    text-decoration: underline;
+}
+button:focus {
+    background-color: var(--ilw-link--focus-background-color);
+    color: var(--ilw-link--focus-color);
+    border-color: var(--ilw-link--focus-color);
+    text-decoration: underline;
+    outline: var(--ilw-link--focus-outline);
+}
+button:active {
+    background-color: var(--ilw-button--active-background-color);
+    color: var(--ilw-button--active-color);
+    border-color: var(--ilw-button--active-border-color);
+    outline: solid var(--ilw-button--active-border-color) 2px;
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   .slider span, .slider span:before {
     transition: none;
