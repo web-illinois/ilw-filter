@@ -10,6 +10,9 @@ export default class FilterDropdownSimple extends FilterItem<string> {
     @property()
     placeholder = "";
 
+    @property()
+    hideLabel = false;
+
     @property({ reflect: true, useDefault: true })
     value: string | undefined = undefined;
 
@@ -72,7 +75,7 @@ export default class FilterDropdownSimple extends FilterItem<string> {
     render() {
         return html`
             <div class="dropdown">
-                <label for=${this.id}>${this.label}</label>
+                <label class="${this.hideLabel ? 'hidden' : ''}" for=${this.id}>${this.label}</label>
                 <select
                     id=${this.id}
                     name=${this.name}
