@@ -72,6 +72,13 @@ export default class FilterDropdownSimple extends FilterItem<string> {
         `;
     }
 
+    renderPlaceholder(textitem: string) {
+        console.log("renderPlaceholder", textitem);
+        if (textitem === undefined || textitem === "") 
+            return html``;
+        return html`<option value="">${textitem}</option>`;
+    }
+
     render() {
         return html`
             <div class="dropdown">
@@ -81,7 +88,7 @@ export default class FilterDropdownSimple extends FilterItem<string> {
                     name=${this.name}
                     @input=${this.valueUpdateListener}
                     value=${ifDefined(this.value)}>
-                    <option value="">${this.placeholder}</option>
+                    ${this.renderPlaceholder(this.placeholder)}
                     ${this.allValues?.map(item => {
                         return html`<option value="${item}">${item}</option>`;
                     })}

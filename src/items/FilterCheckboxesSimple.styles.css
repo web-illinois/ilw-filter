@@ -54,13 +54,14 @@ div.checkbox {
 input[type="checkbox"] {
     margin: 0;
     border-radius: 5px;
-    padding: 10px;
+    padding: 0;
     font: 1rem / 1.125rem var(--il-font-sans);
     background-color: #fff;
     border: thin var(--il-blue) solid;
     width: 18px;
     height: 18px;
     box-sizing: border-box;
+    flex: 22px 0 0;
 }
 
 input[type="checkbox"]:focus {

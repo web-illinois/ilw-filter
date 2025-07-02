@@ -139,7 +139,7 @@
 <style>
     .ilw-directory-grid {
         display: grid;
-        grid-template-columns: 500px 1fr;
+        grid-template-columns: 410px 1fr;
         grid-template-rows: 60px 1fr;
         gap: 1rem;
     }
@@ -163,7 +163,7 @@
 
 <div class="ilw-directory-gridoptions">
     <ilw-filter-dropdownsimple hideLabel="true" id="displaytype" label="Display Type" name="displaytype" placeholder="Select an option" allValues="View by Office[-]View by Profile[-]View by List" query></ilw-filter-dropdownsimple>
-    <ilw-filter-dropdownsimple hideLabel="true" id="viewperpage" label="View Per Page" name="viewperpage" placeholder="Select an option" allValues="18 per page[-]36 per page[-]All people" query></ilw-filter-dropdownsimple>
+    <ilw-filter-dropdownsimple hideLabel="true" id="viewperpage" label="View Per Page" name="viewperpage" allValues="18 per page[-]36 per page[-]All people" query></ilw-filter-dropdownsimple>
 </div>
 
 <ilw-filter toggle register='["searchquery", "displaytype", "viewperpage"]'>

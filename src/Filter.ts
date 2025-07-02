@@ -159,6 +159,7 @@ export default class Filter extends LitElement {
                         <slot name="heading"></slot>
                     </div>
                     ${this.toggle ? this.renderToggle() : ''}
+                    <div role="presentation" class="line"></div> 
                     <slot></slot>
                 </form>
                 <button @click=${this.toggleResetAll}>
