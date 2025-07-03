@@ -4,7 +4,13 @@ import styles from "./FilterDropdownSimple.styles.css?inline";
 import { customElement, property } from "lit/decorators.js";
 import {ifDefined} from 'lit/directives/if-defined.js';
 import { FilterItem } from "./FilterItem";
+import { allValuesParse } from "../util";
 
+/**
+ * A simple filter item that allows selecting a single value from a dropdown.
+ *
+ * See {@link allValuesParse} for the format of the `allValues` property.
+ */
 @customElement("ilw-filter-dropdownsimple")
 export default class FilterDropdownSimple extends FilterItem<string> {
     @property()
@@ -19,29 +25,10 @@ export default class FilterDropdownSimple extends FilterItem<string> {
     @property({
         useDefault: true,
         converter: {
-            fromAttribute: (value: string): string[] => {
-                if (!value) {
-                    return [];
-                }
-                try {
-                    return value.split("[-]");
-                } catch (e) {
-                    console.warn(
-                        `ilw-filter-checkboxes: Failed to parse value ${value}, using empty object.`,
-                        e,
-                    );
-                    return [];
-                }
-            },
-            toAttribute(value): string {
-                if (!value) {
-                    return "";
-                }
-                return JSON.stringify(value);
-            },
+            fromAttribute: allValuesParse("ilw-filter-dropdownsimple"),
         },
     })
-    allValues: string[] | undefined = undefined;
+    allValues: (string | [string, string])[] | undefined = undefined;
 
     static get styles() {
         return unsafeCSS(styles);
@@ -55,22 +42,6 @@ export default class FilterDropdownSimple extends FilterItem<string> {
         const target = event.target as HTMLInputElement;
         this.setValue(target.value);
     };
-
-    renderToggle(textitem: string, i: number) {
-        let isChecked = this.value?.includes(textitem);
-        return html`
-            <div class="checkbox">
-            <input
-                type="checkbox"
-                id="${this.id + i}"
-                value="${textitem}"
-                @input=${this.valueUpdateListener}
-                ?checked=${isChecked}
-            />
-            <label for="${this.id + i}">${textitem}</label>
-            </div>
-        `;
-    }
 
     renderPlaceholder(textitem: string) {
         console.log("renderPlaceholder", textitem);
@@ -90,7 +61,9 @@ export default class FilterDropdownSimple extends FilterItem<string> {
                     value=${ifDefined(this.value)}>
                     ${this.renderPlaceholder(this.placeholder)}
                     ${this.allValues?.map(item => {
-                        return html`<option value="${item}">${item}</option>`;
+                        const value = typeof item === 'string' ? item : item[0];
+                        const label = typeof item === 'string' ? item : item[1];
+                        return html`<option value="${value}">${label}</option>`;
                     })}
                 </select>
             </div>
