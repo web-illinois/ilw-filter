@@ -124,6 +124,10 @@ div.line {
   display: none;
 }
 
+.slider label {
+    cursor: pointer;
+}
+
 button {
     background-color: var(--ilw-button--background-color);
     color: var(--ilw-button--foreground-color);
@@ -173,4 +177,16 @@ button:active {
   .slider span, .slider span:before {
     transition: none;
   }
+}
+
+/* copied from ilw-global to apply in shadow DOM */
+.ilw-sr-only {
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important
 }
