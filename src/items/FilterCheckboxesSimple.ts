@@ -1,60 +1,36 @@
 import { html, unsafeCSS } from "lit";
 // @ts-ignore
 import styles from "./FilterCheckboxesSimple.styles.css?inline";
-import { customElement, property, queryAll } from "lit/decorators.js";
+import { customElement, property, query, queryAll } from "lit/decorators.js";
 import { FilterItem } from "./FilterItem";
+import { allValuesParse } from "../util";
 
+/**
+ * A simple filter item that allows selecting multiple checkboxes.
+ *
+ * See {@link allValuesParse} for the format of the `allValues` property.
+ */
 @customElement("ilw-filter-checkboxessimple")
 export default class FilterCheckboxesSimple extends FilterItem<string> {
     @property({
         reflect: true,
-        useDefault: true,
-        converter: {
-            fromAttribute: (value: string): string => {
-                if (!value) {
-                    return "";
-                }
-                return value;
-            },
-            toAttribute(value): string {
-                if (!value) {
-                    return "";
-                }
-                return value.toString();
-            },
-        },
+        useDefault: true
     })
     value: string | undefined = undefined;
 
     @property({
         useDefault: true,
         converter: {
-            fromAttribute: (value: string): string[] => {
-                if (!value) {
-                    return [];
-                }
-                try {
-                    return value.split("[-]");
-                } catch (e) {
-                    console.warn(
-                        `ilw-filter-checkboxes: Failed to parse value ${value}, using empty object.`,
-                        e,
-                    );
-                    return [];
-                }
-            },
-            toAttribute(value): string {
-                if (!value) {
-                    return "";
-                }
-                return JSON.stringify(value);
-            },
+            fromAttribute: allValuesParse("ilw-filter-checkboxessimple")
         },
     })
-    allValues: string[] | undefined = undefined;
+    allValues: (string | [string, string])[] | undefined = undefined;
 
     @queryAll("input")
     inputs!: NodeListOf<HTMLInputElement>;
+
+    @query("details")
+    details!: HTMLDetailsElement;
 
     static get styles() {
         return unsafeCSS(styles);
@@ -65,16 +41,14 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     }
 
     collapse() {
-        let detail = this.shadowRoot?.querySelector('details');
-        if (detail) {
-            detail.removeAttribute("open");
+        if (this.details) {
+            this.details.removeAttribute("open");
         }
     }
 
     expand() {
-        let detail = this.shadowRoot?.querySelector('details');
-        if (detail) {
-            detail.setAttribute("open", "open");
+        if (this.details) {
+            this.details.setAttribute("open", "open");
         }
     }
 
@@ -88,18 +62,20 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
         this.setValue(arr.join("[-]"));
    };
 
-    renderCheckbox(textitem: string, i: number) {
-        let isChecked = this.value?.includes(textitem);
+    renderCheckbox(textitem: string | [string, string], i: number) {
+        const value = typeof textitem === 'string' ? textitem : textitem[0];
+        const label = typeof textitem === 'string' ? textitem : textitem[1];
+        let isChecked = this.value?.includes(value);
         return html`
             <div class="checkbox">
             <input
                 type="checkbox"
                 id="${this.id + i}"
-                value="${textitem}"
+                value="${value}"
                 @input=${this.valueUpdateListener}
-                ?checked=${isChecked}
+                .checked=${isChecked}
             />
-            <label for="${this.id + i}">${textitem}</label>
+            <label for="${this.id + i}">${label}</label>
             </div>
         `;
     }
