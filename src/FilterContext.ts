@@ -101,9 +101,7 @@ export class FilterContext extends EventTarget {
             this.values.set(name, value);
             const item = this.items.get(name);
             if (item) {
-                // We don't need to check for equality, because Lit does that for
-                // us already.
-                item.value = value;
+                item.setValue(value);
             }
         }
 

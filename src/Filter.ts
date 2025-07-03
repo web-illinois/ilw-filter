@@ -2,7 +2,7 @@ import { LitElement, html, unsafeCSS, PropertyValues } from "lit";
 // @ts-ignore
 import styles from "./Filter.styles.css?inline";
 import "./ilw-filter.css";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { provide } from "@lit/context";
 import { FilterContext, filterContext } from "./FilterContext";
 import { FilterItem } from "./items/FilterItem";
@@ -37,6 +37,12 @@ export default class Filter extends LitElement {
 
     @property({ type: Boolean })
     toggle = false;
+
+    @query("switch")
+    toggleElement!: HTMLInputElement;
+
+    @state()
+    protected allExpanded = false;
 
     static get styles() {
         return unsafeCSS(styles);
@@ -83,6 +89,7 @@ export default class Filter extends LitElement {
                 this.context.valueUpdated(filters);
             }
         }
+        this.allExpanded = this.toggleElement.checked;
     }
 
     disconnectedCallback() {
@@ -132,6 +139,7 @@ export default class Filter extends LitElement {
 
     toggleListener = () => {
         let checked = <HTMLInputElement>this.shadowRoot?.querySelector('.slider input');
+        this.allExpanded = checked.checked;
         this.querySelectorAll("ilw-filter-checkboxessimple").forEach((panel) => {
             checked.checked ? panel.expand() : panel.collapse();
         });
@@ -142,12 +150,19 @@ export default class Filter extends LitElement {
     }
 
     renderToggle() {
+        // Having a separate label text for screen readers seems to
+        // be the best compromise, even though it won't match the visual label.
+        // This way the label isn't re-announced every time the toggle is clicked.
         return html`<div class="slider">
-                    <input type="checkbox" role="switch" @input=${this.toggleListener}><span>
+                    <input type="checkbox" role="switch" id="switch" @input=${this.toggleListener}>
+                    <span>
                         <span class="container"></span>
-                        <span aria-hidden="true" class="text-on">Collapse All</span>
-                        <span aria-hidden="true" class="text-off">Expand All</span></span>
-                </div>`
+                        <label for="switch" class="text-${this.allExpanded ? 'on' : 'off'}">
+                            <span aria-hidden="true">${this.allExpanded ? 'Collapse All' : 'Expand All'}</span>
+                            <span class="ilw-sr-only">Expand All</span>
+                        </label>
+                    </span>
+                    </div>`
     }
 
 

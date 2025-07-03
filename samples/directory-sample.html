@@ -18,6 +18,24 @@
         filter.addEventListener('ilw-filter-update', function(e) { search(e); });
     });
 
+    function remove(category, item) {
+        let filter = document.querySelector('ilw-filter');
+        let filterJson = JSON.parse(filter.getAttribute('filters'));
+        if (category == 'jobtypes') {
+            filterJson.jobtypes = filterJson.jobtypes.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices') {
+            filterJson.offices = filterJson.offices.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices2') {
+            filterJson.offices2 = filterJson.offices2.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices3') {
+            filterJson.offices3 = filterJson.offices3.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        filter.setAttribute('filters', JSON.stringify(filterJson));
+    }
+
     function search(e) {
         let jsonFilters = e.detail.values;
         let jobTypes = encodeURIComponent(jsonFilters.jobtypes ?? '');
@@ -57,11 +75,17 @@
         researchTitle.innerText = 'Research Centers & Outreach Units';
         research.appendChild(researchTitle);
 
+        let searchResult = 'No search results';
         for (var i = 0; i < offices.length; i++) {
+
             var details = document.createElement('details');
             if (offices.length == 1) {
                 details.open = true;
+                searchResult = `${offices[0].people.length} ${offices[0].people.length > 1 ? 'people' : 'person'} found in one unit.`;
+            } else {
+                searchResult = `${offices.length} ${offices.length > 1 ? 'units' : 'unit'} found.`;
             }
+
             var summary = document.createElement('summary');
             summary.innerHTML = offices[i].title;
             details.appendChild(summary);
@@ -133,48 +157,58 @@
         if (administration.children.length > 1) {
             faculty.appendChild(administration);
         }
+
+        document.querySelector('.search-results').textContent = searchResult;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('remove');
+
+        button.addEventListener('click', function () {
+            remove('jobtypes', 'Graduate Student');
+        });
+    });
 </script>
 
 <style>
-    .ilw-directory-grid {
-        display: grid;
-        grid-template-columns: 410px 1fr;
-        grid-template-rows: 60px 1fr;
+    .ilw-directory-top {
+        display: flex;
         gap: 1rem;
     }
-    .ilw-directory-gridoptions {
-        display: flex;
-        column-gap: 23px;
-    }
-   .ilw-directory-gridoptions ilw-filter-dropdownsimple {
+    .ilw-directory-top ilw-filter-dropdownsimple {
         width: 300px;
     }
-   .ilw-directory-grid ilw-filter-search {
-        display: block; 
-        padding: 0 1.25rem;
+    .ilw-directory-grid {
+        display: flex;
+        column-gap: 2rem;
     }
 
 </style>
 <h1>This is an end-to-end test for the College of Education directory</h1>
 
-<div class="ilw-directory-grid">
-<ilw-filter-search hideLabel="true" id="searchquery" label="Search" placeholder="Search by name or keyword" name="searchquery" query></ilw-filter-search>
 
-<div class="ilw-directory-gridoptions">
+<div role="search" aria-label="by text, search options" class="ilw-directory-top">
+    <ilw-filter-search hideLabel="true" id="searchquery" label="Search" placeholder="Search by name or keyword" name="searchquery" query></ilw-filter-search>
+
     <ilw-filter-dropdownsimple hideLabel="true" id="displaytype" label="Display Type" name="displaytype" placeholder="Select an option" allValues="View by Office[-]View by Profile[-]View by List" query></ilw-filter-dropdownsimple>
     <ilw-filter-dropdownsimple hideLabel="true" id="viewperpage" label="View Per Page" name="viewperpage" allValues="18 per page[-]36 per page[-]All people" query></ilw-filter-dropdownsimple>
+    <button type="button" class="ilw-button" id="remove">Remove Graduate Student</button>
+
 </div>
 
-<ilw-filter toggle register='["searchquery", "displaytype", "viewperpage"]'>
-    <h2 slot="heading">Filter by</h2>
-    <ilw-filter-checkboxessimple label="Role" name="jobtypes" allValues="Faculty[-]Staff[-]Graduate Student" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-checkboxessimple label="Departments" name="offices" allValues="Curriculum & Instruction[-]Education Policy, Organization and Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-checkboxessimple label="Research and Outreach Units" name="offices2" allValues="Bureau of Educational Research[-]Center for Culturally Responsive Evaluation and Assessment[-]Center for Education in Small Urban Communities[-]Early Childhood Collective[-]Forum on the Future of Public Education[-]Illinois New Teacher Collaborative[-]Office for Mathematics, Science, & Technology Education[-]Office of Community College Research and Leadership[-]Technology Innovation in Educational Research & Design[-]University Primary School" query compact></ilw-filter-checkboxessimple>
-    <ilw-filter-checkboxessimple label="Administrative Units" name="offices3" allValues="Office of Advancement[-]Marketing and Communications[-]Council on Teacher Education[-]Office of the Dean[-]Special Education" query compact></ilw-filter-checkboxessimple>
-</ilw-filter>
+<div class="ilw-directory-grid">
+    <ilw-filter toggle register='["searchquery", "displaytype", "viewperpage"]'>
+        <h2 slot="heading">Filter by</h2>
+        <ilw-filter-checkboxessimple label="Role" name="jobtypes" allValues="Faculty[-]Staff[-]Graduate Student" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Departments" name="offices" allValues="Curriculum & Instruction[-]Education Policy, Organization and Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Research and Outreach Units" name="offices2" allValues="Bureau of Educational Research[-]Center for Culturally Responsive Evaluation and Assessment[-]Center for Education in Small Urban Communities[-]Early Childhood Collective[-]Forum on the Future of Public Education[-]Illinois New Teacher Collaborative[-]Office for Mathematics, Science, & Technology Education[-]Office of Community College Research and Leadership[-]Technology Innovation in Educational Research & Design[-]University Primary School" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Administrative Units" name="offices3" allValues="Office of Advancement[-]Marketing and Communications[-]Council on Teacher Education[-]Office of the Dean[-]Special Education" query compact></ilw-filter-checkboxessimple>
+    </ilw-filter>
 
-<div id="faculty-finder"></div>
+    <aside class="search-results ilw-sr-only" aria-live="polite">
+
+    </aside>
+    <main id="faculty-finder"></main>
 </div>
 </body>
 
