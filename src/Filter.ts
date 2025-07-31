@@ -89,7 +89,7 @@ export default class Filter extends LitElement {
                 this.context.valueUpdated(filters);
             }
         }
-        this.allExpanded = this.toggleElement.checked;
+        this.allExpanded = !!this.toggleElement?.checked;
     }
 
     disconnectedCallback() {

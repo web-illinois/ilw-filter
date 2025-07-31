@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-lit";
 import { html } from "lit";
-import "../ilw-filter";
+import "../src/ilw-filter";
 import { renderFilter } from "./util";
 
 const content = html`
