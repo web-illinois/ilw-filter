@@ -1,5 +1,5 @@
 import { render } from "vitest-browser-lit";
-import Filter from "../Filter";
+import Filter from "../src/Filter";
 import { TemplateResult } from "lit";
 import { vi } from "vitest";
 

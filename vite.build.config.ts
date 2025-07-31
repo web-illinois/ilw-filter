@@ -14,8 +14,7 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 assetFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === "style.css") return "ilw-filter.css";
-                    return "assets/[name]-[hash][extname]"; // vite default
+                    return "[name][extname]";
                 },
             },
         },

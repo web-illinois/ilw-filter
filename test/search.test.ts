@@ -1,7 +1,8 @@
 import { expect, test, vi } from "vitest";
 import { html } from "lit";
-import "../ilw-filter";
+import "../src/ilw-filter";
 import { renderFilter } from "./util";
+import { userEvent } from "@vitest/browser/context";
 
 const content = html` <ilw-filter
     data-testid="filter"
@@ -26,6 +27,7 @@ test("filters in context update when text input changes", async () => {
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(filter.context.get("department")).toEqual("Special Education");
@@ -35,6 +37,7 @@ test("filters attribute updates when text input changes", async () => {
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(filter.getAttribute("filters")).toEqual(
@@ -46,10 +49,12 @@ test("filters in context update when text input changes multiple times", async (
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Speci");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
     expect(filter.context.get("department")).toEqual("Speci");
     await screen.getByLabelText("Dep").fill("Special Edu");
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
     expect(filter.context.get("department")).toEqual("Special Education");
 });
@@ -58,8 +63,11 @@ test("filters attribute updates when text input changes multiple times", async (
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Speci");
+    await userEvent.keyboard("{Enter}");
     await screen.getByLabelText("Dep").fill("Special Edu");
+    await userEvent.keyboard("{Enter}");
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(filter.getAttribute("filters")).toEqual(
@@ -72,6 +80,7 @@ test("input value updates when filters attribute changes", async () => {
 
     filter.setAttribute("filters", '{"department":"Physics"}');
     const dep = screen.getByLabelText("Dep").element() as HTMLInputElement;
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(dep.value).toEqual("Physics");
@@ -82,7 +91,9 @@ test("all filters update when multiple inputs change", async () => {
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await screen.getByLabelText("Course").fill("abc");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(filter.context.get("department")).toEqual("Special Education");
@@ -93,7 +104,9 @@ test("filters attribute updates when multiple inputs change", async () => {
     const { filter, screen } = await renderFilter(content);
 
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await screen.getByLabelText("Course").fill("abc");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(filter.getAttribute("filters")).toEqual(
