@@ -1,11 +1,12 @@
-import { LitElement, html, unsafeCSS, PropertyValues } from "lit";
+import { html, LitElement, PropertyValues, unsafeCSS } from "lit";
 // @ts-ignore
 import styles from "./Filter.styles.css?inline";
 import "./ilw-filter.css";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { provide } from "@lit/context";
-import { FilterContext, filterContext } from "./FilterContext";
+import { debounce, FilterContext, filterContext } from "./FilterContext";
 import { FilterItem } from "./items/FilterItem";
+import FilterCheckboxesSimple from "./items/FilterCheckboxesSimple";
 
 @customElement("ilw-filter")
 export default class Filter extends LitElement {
@@ -38,7 +39,7 @@ export default class Filter extends LitElement {
     @property({ type: Boolean })
     toggle = false;
 
-    @query("switch")
+    @query(".slider-button")
     toggleElement!: HTMLInputElement;
 
     @state()
@@ -70,9 +71,33 @@ export default class Filter extends LitElement {
         }
     };
 
+    protected layoutUpdateListener = debounce(() => {
+        setTimeout(() => {
+            const list = this.querySelectorAll<FilterCheckboxesSimple>(
+                "ilw-filter-checkboxessimple",
+            );
+            console.log("list", list);
+            const checkboxesExpanded = list?.length
+                ? Array.from(list).map((checkbox) => {
+                      return !checkbox.compact || !checkbox.isCollapsed();
+                  })
+                : [false];
+
+            if (!this.allExpanded && checkboxesExpanded.every(it => it)) {
+                this.allExpanded = true;
+            } else if (this.allExpanded && checkboxesExpanded.every(it => !it)) {
+                this.allExpanded = false;
+            }
+        });
+    }, 50);
+
     connectedCallback() {
         super.connectedCallback();
         this.context.addEventListener("item-update", this.itemUpdateListener);
+        this.context.addEventListener(
+            "layout-update",
+            this.layoutUpdateListener,
+        );
         // If the filters value isn't the default value, update the context
         if (this.filters && this.filters !== "{}") {
             this.context.debug("Filter connected filters", this.filters);
@@ -89,13 +114,17 @@ export default class Filter extends LitElement {
                 this.context.valueUpdated(filters);
             }
         }
-        this.allExpanded = this.toggleElement.checked;
+        this.allExpanded = !!this.toggleElement?.checked;
     }
 
     disconnectedCallback() {
         this.context.removeEventListener(
             "item-update",
             this.itemUpdateListener,
+        );
+        this.context.addEventListener(
+            "layout-update",
+            this.layoutUpdateListener,
         );
         super.disconnectedCallback();
     }
@@ -128,21 +157,22 @@ export default class Filter extends LitElement {
                 if (element instanceof FilterItem) {
                     element.connect(this.context);
                 } else {
-                    this.context.debug(
-                        "Filter register item not found",
-                        name
-                    );
+                    this.context.debug("Filter register item not found", name);
                 }
             }
         }
     }
 
-    toggleListener = () => {
-        let checked = <HTMLInputElement>this.shadowRoot?.querySelector('.slider input');
-        this.allExpanded = checked.checked;
-        this.querySelectorAll("ilw-filter-checkboxessimple").forEach((panel) => {
-            checked.checked ? panel.expand() : panel.collapse();
-        });
+    toggleListener = (ev: PointerEvent) => {
+        const target = <HTMLElement>ev.target;
+        const button = target.closest("button");
+        const checked = button?.getAttribute("aria-expanded") !== "true";
+        this.allExpanded = checked;
+        this.querySelectorAll("ilw-filter-checkboxessimple").forEach(
+            (panel) => {
+                checked ? panel.expand() : panel.collapse();
+            },
+        );
     };
 
     toggleResetAll() {
@@ -150,21 +180,24 @@ export default class Filter extends LitElement {
     }
 
     renderToggle() {
-        // Having a separate label text for screen readers seems to
-        // be the best compromise, even though it won't match the visual label.
-        // This way the label isn't re-announced every time the toggle is clicked.
         return html`<div class="slider">
-                    <input type="checkbox" role="switch" id="switch" @input=${this.toggleListener}>
-                    <span>
-                        <span class="container"></span>
-                        <label for="switch" class="text-${this.allExpanded ? 'on' : 'off'}">
-                            <span aria-hidden="true">${this.allExpanded ? 'Collapse All' : 'Expand All'}</span>
-                            <span class="ilw-sr-only">Expand All</span>
-                        </label>
-                    </span>
-                    </div>`
+            <button
+                type="button"
+                class="slider-button ${this.allExpanded
+                    ? "expanded"
+                    : "collapsed"}"
+                aria-expanded=${this.allExpanded ? "true" : "false"}
+                @click=${this.toggleListener}
+            >
+                <span class="slider-box" aria-hidden="true">
+                    <span class="slider-toggle"></span>
+                </span>
+                <span class="text">
+                    ${this.allExpanded ? "Collapse All" : "Expand All"}
+                </span>
+            </button>
+        </div>`;
     }
-
 
     render() {
         return html`

@@ -49,35 +49,6 @@
 </div>
 
 <script>
-    const filter = document.querySelector('ilw-filter');
-    const search = document.querySelector('ilw-filter-search');
-    const hidden = document.querySelector('ilw-filter-hidden');
-
-    // Use a mutation observer to detect changes to the filter
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            /**
-             *
-             * @type {HTMLElement}
-             */
-            const target = mutation.target;
-            console.log('Filter changed:', target.getAttribute('filters'));
-        });
-    });
-    observer.observe(filter, {
-        attributeFilter: ['filters']
-    });
-
-    setTimeout(() => {
-        // Set the filter to a new value
-        filter.setAttribute("filters", JSON.stringify({
-            department: 'Special Education',
-            course: '599',
-            multi: {a: 'ping', b: 'pong'},
-            checkboxes: ['test1', 'test2']
-        }));
-    }, 2000);
-
 </script>
 </body>
 

@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
 import { html } from "lit";
-import "../ilw-filter";
+import "../src/ilw-filter";
 import { renderFilter } from "./util";
 
 const content = html` <ilw-filter
