@@ -114,30 +114,29 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     render() {
         if (this.compact) {
             return html`
-                <details @toggle="${this.context?.triggerLayoutUpdate()}">
+                <details>
                     <summary>
-                        <span>${this.label} </span>${this.renderChevron()}
+                        <span id="${this.id + '-legend'}">${this.label} </span>${this.renderChevron()}
                     </summary>
-                    <fieldset>
-                        <legend>${this.label}</legend>
+                    <div class="group" role="group" aria-labelledby="${this.id + '-legend'}">
                         ${this.allValues?.map((item, i) => {
                             return this.renderCheckbox(item, i);
                         })}
-                    </fieldset>
+                    </div>
                 </details>
             `;
         }
 
         return html`
             <div>
-                <fieldset>
-                    <legend>${this.label}</legend>
-                    <div>
-                        ${this.allValues?.map((item, i) => {
-                            return this.renderCheckbox(item, i);
-                        })}
-                    </div>
-                </fieldset>
+                <div class="legend">
+                    <span id="${this.id + '-legend'}">${this.label} </span>${this.renderChevron()}
+                </div>
+                <div role="group" aria-labelledby="${this.id + '-legend'}">
+                    ${this.allValues?.map((item, i) => {
+                        return this.renderCheckbox(item, i);
+                    })}
+                </div>
             </div>
         `;
     }
