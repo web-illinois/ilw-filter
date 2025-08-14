@@ -137,11 +137,13 @@ export default class Filter extends LitElement {
         }
     }
 
-    toggleListener = () => {
-        let checked = <HTMLInputElement>this.shadowRoot?.querySelector('.slider input');
-        this.allExpanded = checked.checked;
+    toggleListener = (ev: PointerEvent) => {
+        const target = <HTMLElement>ev.target;
+        const button = target.closest('button');
+        const checked = button?.getAttribute('aria-expanded') !== 'true';
+        this.allExpanded = checked;
         this.querySelectorAll("ilw-filter-checkboxessimple").forEach((panel) => {
-            checked.checked ? panel.expand() : panel.collapse();
+            checked ? panel.expand() : panel.collapse();
         });
     };
 
@@ -150,18 +152,18 @@ export default class Filter extends LitElement {
     }
 
     renderToggle() {
-        // Having a separate label text for screen readers seems to
-        // be the best compromise, even though it won't match the visual label.
-        // This way the label isn't re-announced every time the toggle is clicked.
         return html`<div class="slider">
-                    <input type="checkbox" role="switch" id="switch" @input=${this.toggleListener}>
-                    <span>
-                        <span class="container"></span>
-                        <label for="switch" class="text-${this.allExpanded ? 'on' : 'off'}">
-                            <span aria-hidden="true">${this.allExpanded ? 'Collapse All' : 'Expand All'}</span>
-                            <span class="ilw-sr-only">Expand All</span>
-                        </label>
-                    </span>
+                    <button type="button" 
+                            class="slider-button ${this.allExpanded ? 'expanded' : 'collapsed'}"
+                            aria-expanded=${this.allExpanded ? 'true' : 'false'}
+                            @click=${this.toggleListener}>
+                        <span class="slider-box" aria-hidden="true">
+                            <span class="slider-toggle"></span>
+                        </span>
+                        <span class="text">
+                            ${this.allExpanded ? 'Collapse All' : 'Expand All'}
+                        </span>
+                    </button>
                     </div>`
     }
 

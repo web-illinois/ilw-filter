@@ -2,7 +2,6 @@
 @layer base {
     :host {
         --ilw-filter--width: 350px;
-
     }
 }
 
@@ -19,14 +18,14 @@ div.parent {
 }
 
 div.parent #ilw-search-heading ::slotted(*) {
-  font-family: var(--il-font-sans);
-  color: var(--il-blue);
-  font-size: 1.8125rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 2.1875rem;
-  margin: 0;
-  padding-bottom: 1.25rem;
+    font-family: var(--il-font-sans);
+    color: var(--il-blue);
+    font-size: 1.8125rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 2.1875rem;
+    margin: 0;
+    padding-bottom: 1.25rem;
 }
 
 div.line {
@@ -38,94 +37,63 @@ div.line {
 }
 
 .slider {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 24px;
-}
+    button.slider-button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        background: none;
+        margin: 0;
+        padding: 4px 2px;
+        border: none;
+        text-decoration: none;
 
-.slider input[type="checkbox"] {
-  z-index: 10;
-  position: relative;
-  color: transparent;
-  width: 60px;
-  height: 24px;
-  background: transparent;
-  border: transparent;
-  opacity: 0;
-  cursor: pointer;
-}
+        &:focus {
+            outline: none;
+        }
+        &:focus-visible {
+            outline: 2px solid var(--ilw-button--focused-border-color);
+            background: var(--ilw-link--focus-background-color);
+        }
+        .slider-box {
+            display: flex;
+            cursor: pointer;
+            box-sizing: border-box;
+            width: 50px;
+            height: 25px;
+            padding-top: 4px;
+            padding-left: 4px;
+            background-color: var(--il-storm-lighter-1);
+            transition: background-color 0.4s;
+            border-radius: 13px;
+        }
+        &:focus {
+            .slider-box {
+                outline: 2px solid var(--ilw-button--focused-border-color);
+            }
+        }
+        .slider-toggle {
+            display: block;
+            border-radius: 50%;
+            width: 17px;
+            height: 17px;
+            background-color: #fff;
+            transition: 0.4s;
+        }
 
-.slider > span .container {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--il-storm-lighter-1);
-  transition: 0.4s;
-  border-radius: 34px;
-}
-
-.slider > span .container:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 6px;
-  bottom: 2px;
-  background-color: #FFF;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-.slider input:checked + span .container {
-  background-color: var(--il-altgeld);
-}
-
-.slider input:checked + span .container:before {
-  transform: translateX(30px);
-}
-
-.slider input:focus + span span {
-  outline: 3px solid var(--il-blue);
-}
-
-
-.slider > span .text-on, .slider > span .text-off {
-  left: 70px;
-  right: 0;
-  bottom: 0;
-  color: var(--il-blue);
-  font: normal 400 1.25rem / 1.5rem var(--il-font-sans);
-  margin: 0;
-  width: 100px;
-  height: 24px;
-  justify-content: center;
-  align-items: center;
-}
-
-.slider > span .text-on {
-  display: none;
-  position: absolute;
-}
-
-.slider > span .text-off {
-  display: flex;
-  position: absolute;
-}
-
-.slider > input:checked + span .text-on {
-  display: flex;
-}
-
-.slider > input:checked + span .text-off {
-  display: none;
-}
-
-.slider label {
-    cursor: pointer;
+        .text {
+            color: var(--il-blue);
+            font: normal 400 1.25rem / 1.5rem var(--il-font-sans);
+            margin-left: 11px;
+        }
+        &.expanded {
+            .slider-box {
+                background-color: var(--il-altgeld);
+            }
+            .slider-toggle {
+                transform: translateX(25px);
+            }
+        }
+    }
 }
 
 button {
@@ -139,7 +107,7 @@ button {
     text-align: center;
     text-decoration: none;
     border-radius: 0.25em;
-    letter-spacing: .01em;
+    letter-spacing: 0.01em;
     transition: background-color 0.3s;
     cursor: pointer;
     width: fit-content;
@@ -174,19 +142,8 @@ button:active {
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .slider span, .slider span:before {
-    transition: none;
-  }
-}
-
-/* copied from ilw-global to apply in shadow DOM */
-.ilw-sr-only {
-    clip: rect(1px, 1px, 1px, 1px) !important;
-    clip-path: inset(50%) !important;
-    height: 1px !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    position: absolute !important;
-    width: 1px !important
+    .slider span,
+    .slider span:before {
+        transition: none;
+    }
 }
