@@ -124,6 +124,10 @@ export class FilterContext extends EventTarget {
         window.history.replaceState({}, "", newUrl);
     }
 
+    public readonly triggerLayoutUpdate = () => {
+        this.dispatchEvent(new CustomEvent("layout-update"));
+    }
+
     protected dispatchItemUpdate = debounce(() => {
         // This can get called a lot in some scenarios, so debounce it.
         this.dispatchEvent(
