@@ -61,9 +61,11 @@ There are three values events that `ilw-filter` emits:
   clicking the submit button, or calling the `submit()` method.
 - `autosubmit` - When the filters are automatically submitted, such as when a filter item is changed.
   This differs from the filters event in that it is not dispatched immediately on changes, but rather
-  when each input type considers it appropriate to submit the filters. For example, a select input
-  will submit the filters when the selection changes, while a text input will wait until the user
-  presses enter or the input loses focus.
+  when each input type considers it appropriate to submit the filters.
+
+For example, a select input will `autosubmit` the filters when the selection changes, while a text 
+input can wait until the user presses enter or the input loses focus. The specifics of when each
+event is fired is left up to the filter item component.
 
 With each event, the event object is a `CustomEvent` with the `details` property being an object
 with one key, `values`, which is the current filters object.
