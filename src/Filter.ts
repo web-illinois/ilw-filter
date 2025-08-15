@@ -148,6 +148,21 @@ export default class Filter extends LitElement {
 
     protected updated(_changedProperties: PropertyValues) {
         super.updated(_changedProperties);
+        if (
+            _changedProperties.has("filters") &&
+            _changedProperties.get("filters")
+        ) {
+            this.context.debug("Filter value updated", this.filters);
+            let filters: Record<string, any> | null = null;
+            try {
+                filters = JSON.parse(this.filters);
+            } catch (e) {
+                console.error("Invalid JSON given to ilw-filter", e);
+            }
+            if (filters) {
+                this.context.valueUpdated(filters);
+            }
+        }
         if (_changedProperties.has("register")) {
             this.context.debug("Filter register updated", this.register);
             for (const name of this.register) {
