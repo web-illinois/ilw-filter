@@ -15,7 +15,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const filter = document.querySelector('ilw-filter');
-        filter.addEventListener('ilw-filter-update', function(e) { search(e); });
+        filter.addEventListener('autosubmit', function(e) { search(e); });
     });
 
     function remove(category, item) {
@@ -37,7 +37,9 @@
     }
 
     function search(e) {
+        console.log("search", e);
         let jsonFilters = e.detail.values;
+        console.log('searching', jsonFilters);
         let jobTypes = encodeURIComponent(jsonFilters.jobtypes ?? '');
         let offices = encodeURIComponent(jsonFilters.offices ?? '');
         let searchQuery = encodeURIComponent(jsonFilters.searchquery ?? '');

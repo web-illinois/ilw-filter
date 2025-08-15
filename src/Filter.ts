@@ -54,22 +54,33 @@ export default class Filter extends LitElement {
     }
 
     protected itemUpdateListener = () => {
+        this.dispatchValues("filters");
+    };
+
+    protected autosubmitListener = () => {
+        this.dispatchValues("autosubmit");
+    };
+
+    protected submitListener = () => {
+        this.dispatchValues("submit");
+        this.dispatchValues("autosubmit");
+    }
+
+    protected dispatchValues(eventName: string) {
         const values = this.context.getValues();
         const jsonValue = JSON.stringify(values);
         if (this.filters !== jsonValue) {
-            this.context.debug(
-                "Filter itemUpdateListener",
-                this.filters,
-                jsonValue,
-            );
+            this.context.debug("Filter " + eventName, this.filters, jsonValue);
             this.filters = jsonValue;
-            this.dispatchEvent(
-                new CustomEvent("filters", {
-                    detail: values
-                })
-            );
         }
-    };
+        this.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: {
+                    values
+                },
+            }),
+        );
+    }
 
     protected layoutUpdateListener = debounce(() => {
         setTimeout(() => {
@@ -83,9 +94,12 @@ export default class Filter extends LitElement {
                   })
                 : [false];
 
-            if (!this.allExpanded && checkboxesExpanded.every(it => it)) {
+            if (!this.allExpanded && checkboxesExpanded.every((it) => it)) {
                 this.allExpanded = true;
-            } else if (this.allExpanded && checkboxesExpanded.every(it => !it)) {
+            } else if (
+                this.allExpanded &&
+                checkboxesExpanded.every((it) => !it)
+            ) {
                 this.allExpanded = false;
             }
         });
@@ -94,6 +108,8 @@ export default class Filter extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.context.addEventListener("item-update", this.itemUpdateListener);
+        this.context.addEventListener("autosubmit", this.autosubmitListener);
+        this.context.addEventListener("submit", this.submitListener);
         this.context.addEventListener(
             "layout-update",
             this.layoutUpdateListener,
@@ -122,6 +138,8 @@ export default class Filter extends LitElement {
             "item-update",
             this.itemUpdateListener,
         );
+        this.context.removeEventListener("autosubmit", this.autosubmitListener);
+        this.context.removeEventListener("submit", this.submitListener);
         this.context.addEventListener(
             "layout-update",
             this.layoutUpdateListener,
@@ -131,25 +149,6 @@ export default class Filter extends LitElement {
 
     protected updated(_changedProperties: PropertyValues) {
         super.updated(_changedProperties);
-        if (
-            _changedProperties.has("filters") &&
-            _changedProperties.get("filters")
-        ) {
-            this.context.debug("Filter value updated", this.filters);
-            let filters: Record<string, any> | null = null;
-            try {
-                filters = JSON.parse(this.filters);
-            } catch (e) {
-                console.error("Invalid JSON given to ilw-filter", e);
-            }
-            if (filters) {
-                this.context.valueUpdated(filters);
-            }
-            const event = new CustomEvent('ilw-filter-update', {bubbles: true, composed: true, detail: {
-                values: filters,
-            }});
-            this.dispatchEvent(event);
-        }
         if (_changedProperties.has("register")) {
             this.context.debug("Filter register updated", this.register);
             for (const name of this.register) {
@@ -176,7 +175,8 @@ export default class Filter extends LitElement {
     };
 
     toggleResetAll() {
-        window.location.href = window.location.origin + window.location.pathname;
+        window.location.href =
+            window.location.origin + window.location.pathname;
     }
 
     renderToggle() {
@@ -202,17 +202,19 @@ export default class Filter extends LitElement {
     render() {
         return html`
             <div class="parent">
-                <form id="ilw-filter-form" role="search" aria-labelledby="ilw-search-heading">
+                <form
+                    id="ilw-filter-form"
+                    role="search"
+                    aria-labelledby="ilw-search-heading"
+                >
                     <div id="ilw-search-heading">
                         <slot name="heading"></slot>
                     </div>
-                    ${this.toggle ? this.renderToggle() : ''}
-                    <div role="presentation" class="line"></div> 
+                    ${this.toggle ? this.renderToggle() : ""}
+                    <div role="presentation" class="line"></div>
                     <slot></slot>
                 </form>
-                <button @click=${this.toggleResetAll}>
-                    Reset All
-                </button>
+                <button @click=${this.toggleResetAll}>Reset All</button>
             </div>
         `;
     }

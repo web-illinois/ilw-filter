@@ -62,12 +62,12 @@ export abstract class FilterItem<
         super();
     }
 
-    setValue(value: T) {
+    setValue(value: T, autosubmit = true) {
         this.value = value;
         if (this.appliedContext) {
-            this.appliedContext.itemUpdated(this.name, value);
+            this.appliedContext.itemUpdated(this.name, value, autosubmit);
 
-            if (this.query) {
+            if (this.query && autosubmit) {
                 // Update the browser URL with the new value by replacing
                 // history. The timeout is needed to allow the value attribute
                 // to be converted
@@ -86,6 +86,17 @@ export abstract class FilterItem<
         } else {
             console.warn(
                 "FilterItem: No context connected, cannot update value.",
+                this.name,
+            );
+        }
+    }
+
+    submit() {
+        if (this.appliedContext) {
+            this.appliedContext.submit();
+        } else {
+            console.warn(
+                "FilterItem: No context connected, cannot submit values.",
                 this.name,
             );
         }
@@ -110,7 +121,7 @@ export abstract class FilterItem<
             const queryValue = params.get(this.name);
             if (queryValue) {
                 this.setAttribute("value", queryValue);
-                context.itemUpdated(this.name, this.value);
+                context.itemUpdated(this.name, this.value, false);
             }
         }
     }
