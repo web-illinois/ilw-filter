@@ -44,7 +44,6 @@ export default class FilterDropdownSimple extends FilterItem<string> {
     };
 
     renderPlaceholder(textitem: string) {
-        console.log("renderPlaceholder", textitem);
         if (textitem === undefined || textitem === "") 
             return html``;
         return html`<option value="">${textitem}</option>`;

@@ -87,7 +87,6 @@ export default class Filter extends LitElement {
             const list = this.querySelectorAll<FilterCheckboxesSimple>(
                 "ilw-filter-checkboxessimple",
             );
-            console.log("list", list);
             const checkboxesExpanded = list?.length
                 ? Array.from(list).map((checkbox) => {
                       return !checkbox.compact || !checkbox.isCollapsed();
