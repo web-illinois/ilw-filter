@@ -55,10 +55,9 @@ accessibility.
 
 There are three values events that `ilw-filter` emits:
 
-- `filters` - When the filters change, either through user interaction or programmatically. This event
-  includes the current filters object.
+- `filters` - When the filters change, either through user interaction or programmatically.
 - `submit` - When the filters are intentionally submitted, either by pressing enter on a text input,
-  clicking the submit button, or calling the `submit()` method.
+  clicking the submit button, or calling the `submit()` method on the form element.
 - `autosubmit` - When the filters are automatically submitted, such as when a filter item is changed.
   This differs from the filters event in that it is not dispatched immediately on changes, but rather
   when each input type considers it appropriate to submit the filters.
