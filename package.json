@@ -28,7 +28,9 @@
         "build": "tsc --noEmit && vite build --config vite.transpile.config.ts --emptyOutDir && vite build --config vite.build.config.ts --emptyOutDir",
         "preview": "vite preview",
         "prepack": "npm run build",
-        "test:browser": "vitest"
+        "test:axe": "playwright test",
+        "test": "vitest run --browser.headless",
+        "test:browser": "vitest browser --browser chromium"
     },
     "dependencies": {
         "@lit/context": "1.1.6",
