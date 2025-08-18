@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Run Playwright tests
+      - name: Run axe-core tests
         run: npm run test:axe
 
       - name: Upload Axe report
