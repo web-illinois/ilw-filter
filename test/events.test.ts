@@ -28,7 +28,6 @@ test("filters change should dispatch filters event on ilw-filter", async (page) 
 
     let filtersValue = "";
     const callback = vi.fn((e: Event) => {
-        console.log(e);
         if (e instanceof CustomEvent) {
             filtersValue = e.detail.values;
         }
