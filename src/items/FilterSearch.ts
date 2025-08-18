@@ -23,10 +23,14 @@ export default class FilterSearch extends FilterItem<string> {
         super();
     }
 
-    keydownListener = (event: KeyboardEvent) => {
+    protected inputListener = (event: InputEvent) => {
         const target = event.target as HTMLInputElement;
+        this.setValue(target.value, false);
+    }
+
+    protected keydownListener = (event: KeyboardEvent) => {
         if (event.key == 'Enter') {
-            this.setValue(target.value);
+            this.submit();
         }
     };
 
@@ -40,6 +44,7 @@ export default class FilterSearch extends FilterItem<string> {
                     placeholder=${this.placeholder}
                     name=${this.name}
                     value=${this.value ?? ''}
+                    @input=${this.inputListener}
                     @keydown=${this.keydownListener}
                 />
             </div>
