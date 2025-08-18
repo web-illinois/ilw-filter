@@ -79,13 +79,17 @@ export class FilterContext extends EventTarget {
     /**
      * Update the value of a single filter item.
      */
-    itemUpdated(name: string, value: any) {
+    itemUpdated(name: string, value: any, autosubmit: boolean) {
         // Only update the value if it has changed, so we don't dispatch
         // events unnecessarily.
         if (this.values.get(name) !== value) {
             this.debug("FilterContext itemUpdated", name, value);
             this.values.set(name, value);
             this.dispatchItemUpdate();
+            if (autosubmit) {
+                this.debug("FilterContext autosubmit", name, value);
+                this.dispatchAutosubmit();
+            }
         }
     }
 
@@ -101,9 +105,7 @@ export class FilterContext extends EventTarget {
             this.values.set(name, value);
             const item = this.items.get(name);
             if (item) {
-                // We don't need to check for equality, because Lit does that for
-                // us already.
-                item.value = value;
+                item.setValue(value);
             }
         }
 
@@ -126,12 +128,37 @@ export class FilterContext extends EventTarget {
         window.history.replaceState({}, "", newUrl);
     }
 
+    readonly submit = debounce(()=> {
+        this.debug("FilterContext submit", this.getValues());
+        this.dispatchEvent(
+            new CustomEvent("submit", {
+                detail: {
+                    values: this.getValues(),
+                },
+            }),
+        );
+    }, 100);
+
+    public readonly triggerLayoutUpdate = () => {
+        this.dispatchEvent(new CustomEvent("layout-update"));
+    }
+
     protected dispatchItemUpdate = debounce(() => {
         // This can get called a lot in some scenarios, so debounce it.
         this.dispatchEvent(
             new CustomEvent("item-update", {
                 detail: {
                     values: Object.fromEntries(this.values),
+                },
+            }),
+        );
+    }, 10);
+
+    protected dispatchAutosubmit = debounce(() => {
+        this.dispatchEvent(
+            new CustomEvent("autosubmit", {
+                detail: {
+                    values: this.getValues(),
                 },
             }),
         );

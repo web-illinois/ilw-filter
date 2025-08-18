@@ -1,7 +1,8 @@
 import { expect, test, vi } from "vitest";
 import { html } from "lit";
-import "../ilw-filter";
+import "../src/ilw-filter";
 import { renderFilter } from "./util";
+import { userEvent } from '@vitest/browser/context'
 
 const content = html` <ilw-filter
     data-testid="filter"
@@ -22,19 +23,19 @@ const content = html` <ilw-filter
     </ilw-filter-search>
 </ilw-filter>`;
 
-test("filters change should dispatch filters event on ilw-filter", async () => {
+test("filters change should dispatch filters event on ilw-filter", async (page) => {
     const { filter, screen } = await renderFilter(content);
 
     let filtersValue = "";
     const callback = vi.fn((e: Event) => {
-        console.log(e);
         if (e instanceof CustomEvent) {
-            filtersValue = e.detail;
+            filtersValue = e.detail.values;
         }
     });
     filter.addEventListener("filters", callback);
 
     await screen.getByLabelText("Dep").fill("Special Education");
+    await userEvent.keyboard("{Enter}");
     await vi.runAllTimersAsync();
 
     expect(callback).toHaveBeenCalled();

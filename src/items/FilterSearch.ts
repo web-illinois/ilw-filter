@@ -9,6 +9,9 @@ export default class FilterSearch extends FilterItem<string> {
     @property()
     placeholder = "";
 
+    @property()
+    hideLabel = false;
+
     @property({ reflect: true, useDefault: true })
     value: string | undefined = undefined;
 
@@ -20,22 +23,29 @@ export default class FilterSearch extends FilterItem<string> {
         super();
     }
 
-    valueUpdateListener = (event: Event) => {
+    protected inputListener = (event: InputEvent) => {
         const target = event.target as HTMLInputElement;
-        this.setValue(target.value);
+        this.setValue(target.value, false);
+    }
+
+    protected keydownListener = (event: KeyboardEvent) => {
+        if (event.key == 'Enter') {
+            this.submit();
+        }
     };
 
     render() {
         return html`
             <div>
-                <label for=${this.id}>${this.label}</label>
+                <label class="${this.hideLabel ? 'hidden' : ''}" for=${this.id}>${this.label}</label>
                 <input
                     id=${this.id}
                     type="search"
                     placeholder=${this.placeholder}
                     name=${this.name}
-                    @input=${this.valueUpdateListener}
-                    value=${this.value}
+                    value=${this.value ?? ''}
+                    @input=${this.inputListener}
+                    @keydown=${this.keydownListener}
                 />
             </div>
         `;

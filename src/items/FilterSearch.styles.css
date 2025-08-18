@@ -1,9 +1,34 @@
 /* Styleable variables are in the base layer so they can be overridden easily */
 @layer base {
     :host {
-
+        --ilw-filter--width: 350px;
     }
 }
 
 :host {
+}
+
+div {
+    width: var(--ilw-filter--width);
+}
+
+input {
+    font: 1rem/1.125rem var(--il-font-sans);
+    padding: 10px;
+    border: 1px solid var(--il-storm);
+    background: url(//cdn.brand.illinois.edu/icons/solid/orange/search.png) no-repeat scroll calc(100% - 10px) 9px;
+    width: var(--ilw-filter--width);
+    background-clip: padding-box;
+    background-size: 21px;
+}
+
+label.hidden {
+  position: absolute !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
 }

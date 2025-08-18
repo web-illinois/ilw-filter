@@ -15,7 +15,7 @@ export default defineConfig({
             output: {
                 assetFileNames: (chunkInfo) => {
                     if (chunkInfo.name === "style.css") return "ilw-filter.css";
-                    return "assets/[name]-[hash][extname]"; // vite default
+                    return "[name][extname]";
                 },
             },
         },

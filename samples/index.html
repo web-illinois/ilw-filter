@@ -7,7 +7,8 @@
     <title>Filter Component</title>
     <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
     <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-global/3/ilw-global.css">
-    <script type="module" src="/src/ilw-filter.ts"></script>
+    <link rel="stylesheet" href="/dist/cdn/ilw-filter.css">
+    <script type="module" src="/dist/cdn/ilw-filter.js"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
@@ -27,12 +28,9 @@
     <ilw-filter-hidden name="hide" value="test">
 
     </ilw-filter-hidden>
-    <ilw-filter-multi label="Multi" name="multi" query>
+    <ilw-filter-checkboxes label="Checkboxes" name="checkboxes" allValues="test1[-]test2[-]test3" query>
 
-    </ilw-filter-multi>
-    <ilw-filter-list label="List" name="list" query>
-
-    </ilw-filter-list>
+    </ilw-filter-checkboxes>
 </ilw-filter>
 
 <div>
@@ -46,34 +44,6 @@
 </div>
 
 <script>
-    const filter = document.querySelector('ilw-filter');
-    const search = document.querySelector('ilw-filter-search');
-    const hidden = document.querySelector('ilw-filter-hidden');
-
-    // Use a mutation observer to detect changes to the filter
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            /**
-             *
-             * @type {HTMLElement}
-             */
-            const target = mutation.target;
-            console.log('Filter changed:', target.getAttribute('filters'));
-        });
-    });
-    observer.observe(filter, {
-        attributeFilter: ['filters']
-    });
-
-    setTimeout(() => {
-        // Set the filter to a new value
-        filter.setAttribute("filters", JSON.stringify({
-            department: 'Special Education',
-            course: '599',
-            multi: {a: 'ping', b: 'pong'},
-        }));
-    }, 2000);
-
 </script>
 </body>
 

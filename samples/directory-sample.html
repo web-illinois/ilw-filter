@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filter Component</title>
+    <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
+    <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-global/3/ilw-global.css">
+    <script type="module" src="/src/ilw-filter.ts"></script>
+</head>
+
+<body style="margin: 0; padding: 0;">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filter = document.querySelector('ilw-filter');
+        filter.addEventListener('autosubmit', function(e) { search(e); });
+    });
+
+    function remove(category, item) {
+        let filter = document.querySelector('ilw-filter');
+        let filterJson = JSON.parse(filter.getAttribute('filters'));
+        if (category == 'jobtypes') {
+            filterJson.jobtypes = filterJson.jobtypes.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices') {
+            filterJson.offices = filterJson.offices.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices2') {
+            filterJson.offices2 = filterJson.offices2.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        if (category == 'offices3') {
+            filterJson.offices3 = filterJson.offices3.split('[-]').filter((i) => i != item).join('[-]')
+        }
+        filter.setAttribute('filters', JSON.stringify(filterJson));
+    }
+
+    function search(e) {
+        console.log("search", e);
+        let jsonFilters = e.detail.values;
+        console.log('searching', jsonFilters);
+        let jobTypes = encodeURIComponent(jsonFilters.jobtypes ?? '');
+        let offices = encodeURIComponent(jsonFilters.offices ?? '');
+        let searchQuery = encodeURIComponent(jsonFilters.searchquery ?? '');
+        offices = offices != '' ? offices + '[-]' + encodeURIComponent(jsonFilters.offices2 ?? '') : encodeURIComponent(jsonFilters.offices2 ?? '');
+        offices = offices != '' ? offices + '[-]' + encodeURIComponent(jsonFilters.offices3 ?? '') : encodeURIComponent(jsonFilters.offices3 ?? '');
+        let search = '';
+        var url = `https://directoryapi.wigg.illinois.edu/api/Directory/GetFull/education?q=${searchQuery}&offices=${offices}&jobtypes=${jobTypes}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            }
+        }).then(res => res.json()).then(data => {
+            createDirectory(data.office);
+        });
+    }
+
+    function createDirectory(offices) {
+        var faculty = document.getElementById('ilw-directory-results');
+        faculty.innerHTML = '';
+        faculty.classList = 'directory';
+
+        let academic = document.createElement('div');
+        let academicTitle = document.createElement('h2');
+        academicTitle.innerText = 'Academic Departments';
+        academic.appendChild(academicTitle);
+
+        let administration = document.createElement('div');
+        let administrationTitle = document.createElement('h2');
+        administrationTitle.innerText = 'Administration';
+        administration.appendChild(administrationTitle);
+
+        let research = document.createElement('div');
+        let researchTitle = document.createElement('h2');
+        researchTitle.innerText = 'Research Centers & Outreach Units';
+        research.appendChild(researchTitle);
+
+        let searchResult = 'No search results';
+        for (var i = 0; i < offices.length; i++) {
+
+            var details = document.createElement('details');
+            if (offices.length == 1) {
+                details.open = true;
+                searchResult = `${offices[0].people.length} ${offices[0].people.length > 1 ? 'people' : 'person'} found in one unit.`;
+            } else {
+                searchResult = `${offices.length} ${offices.length > 1 ? 'units' : 'unit'} found.`;
+            }
+
+            var summary = document.createElement('summary');
+            summary.innerHTML = offices[i].title;
+            details.appendChild(summary);
+
+            let div = document.createElement('div');
+            div.classList = 'unit il-theme-blue';
+            let h3Office = document.createElement('h3');
+            let divOffice = document.createElement('div');
+            divOffice.classList = 'textonly';
+            let divAddress = document.createElement('div');
+            divAddress.classList = 'textonly';
+            let divHours = document.createElement('div');
+            divHours.classList = 'textonly';
+            let divEmail = document.createElement('div');
+
+            if (offices[i].externalUrl != null && offices[i].externalUrl != '')
+                h3Office.innerHTML = `<a href='${offices[i].externalUrl}'>${offices[i].title}</a>`;
+            else
+                h3Office.innerHTML = offices[i].title;
+            if (offices[i].map != null && offices[i].map != '')
+                divOffice.innerHTML = `<a href='${offices[i].map}'>${offices[i].room} ${offices[i].building}</a>`;
+            else if (offices[i].room != null && offices[i].room != '' && offices[i].building != null && offices[i].building != '')
+                divOffice.innerHTML = `${offices[i].room} ${offices[i].building}`;
+            divAddress.innerHTML = offices[i].address;
+            divHours.innerHTML = offices[i].hoursText;
+            if (offices[i].email != null && offices[i].email != '') {
+                divEmail.innerHTML = `<a href='mailto:${offices[i].email}' class='il-button il-theme-white'>${offices[i].email}</a> `;
+            }
+            if (offices[i].phone != null && offices[i].phone != '') {
+                divEmail.innerHTML += ` <a href='tel:${offices[i].phone}' class='il-button il-theme-white'>${offices[i].phone}</a>`;
+            }
+            div.appendChild(h3Office);
+            if (divOffice.innerHTML != '')
+                div.appendChild(divOffice);
+            if (divAddress.innerHTML != '')
+                div.appendChild(divAddress);
+            if (divHours.innerHTML != '')
+                div.appendChild(divHours);
+            if (divEmail.innerHTML != '')
+                div.appendChild(divEmail);
+            details.appendChild(div);
+            let h3People = document.createElement('h3');
+            h3People.innerHTML = 'People';
+            details.appendChild(h3People);
+            var ul = document.createElement('ul');
+            ul.classList.add('il-profilelist-card');
+            ul.classList.add('il-profilelist-small');
+            for (var j = 0; j < offices[i].people.length; j++) {
+                let li = document.createElement('li');
+                li.innerHTML = `<il-clickable-card href="${offices[i].people[j].profileUrl}" /><img src="${offices[i].people[j].imageUrl}" alt="" slot="image"><p class="heading" slot="header">${offices[i].people[j].fullName}</p><div class="faculty-description">${offices[i].people[j].primaryTitle}</div></il-clickable-card>`;
+                ul.appendChild(li);
+            }
+            details.appendChild(ul);
+
+            if (offices[i].officeType == 'Academic')
+                academic.appendChild(details);
+            else if (offices[i].officeType == 'Research' || offices[i].officeType == 'Community Engagement')
+                research.appendChild(details);
+            else if (!(offices[i].officeType == 'Other' || offices[i].officeType.startsWith("Custom")))
+                administration.appendChild(details);
+        }
+
+        if (academic.children.length > 1) {
+            faculty.appendChild(academic);
+        }
+        if (research.children.length > 1) {
+            faculty.appendChild(research);
+        }
+        if (administration.children.length > 1) {
+            faculty.appendChild(administration);
+        }
+
+        document.querySelector('.search-results').textContent = searchResult;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('remove');
+
+        button.addEventListener('click', function () {
+            remove('jobtypes', 'Graduate Student');
+        });
+    });
+</script>
+
+<style>
+    .ilw-directory-top {
+        display: flex;
+        gap: 1rem;
+    }
+    .ilw-directory-top ilw-filter-dropdownsimple {
+        width: 300px;
+    }
+    .ilw-directory-grid {
+        display: flex;
+        column-gap: 2rem;
+    }
+
+</style>
+<h1>This is an end-to-end test for the College of Education directory</h1>
+<div class="ilw-directory-grid">
+    <ilw-filter-search hideLabel="true" id="searchquery" label="Search" placeholder="Search by name or keyword" name="searchquery" query></ilw-filter-search>
+    <div class="ilw-directory-gridoptions">
+        <ilw-filter-dropdownsimple hideLabel="true" id="displaytype" label="Display Type" name="displaytype" allValues="View by Office[-]View by Profile[-]View by List" query></ilw-filter-dropdownsimple>
+        <ilw-filter-dropdownsimple hideLabel="true" id="viewperpage" label="View Per Page" name="viewperpage" allValues="20 per page[-]50 per page[-]All people" query></ilw-filter-dropdownsimple>
+    </div>
+    <ilw-filter toggle register='["searchquery", "displaytype", "viewperpage"]'>
+       <h2 slot="heading">Filter by</h2>
+        <ilw-filter-checkboxessimple label="Academic Category" name="jobtypes" allValues="Faculty[-]Affiliate[-]Staff[-]Graduate Student[-]Emeritus" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Departments" name="offices" allValues="Curriculum & Instruction[-]Education Policy, Organization & Leadership[-]Educational Psychology[-]Special Education" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Research and Outreach Units" name="offices2" allValues="Bureau of Educational Research[-]Center for Culturally Responsive Evaluation and Assessment[-]Center for Education in Small Urban Communities[-]Early Childhood Collective[-]Forum on the Future of Public Education[-]Illinois New Teacher Collaborative[-]Office for Mathematics, Science, & Technology Education[-]Office of Community College Research and Leadership[-]Technology Innovation in Educational Research & Design[-]University Primary School" query compact></ilw-filter-checkboxessimple>
+        <ilw-filter-checkboxessimple label="Administrative Units" name="offices3" allValues="Office of Advancement[-]Marketing and Communications[-]Council on Teacher Education[-]Office of the Dean[-]Facilities[-]Finance[-]Human Resources[-]IT Partners at Education[-]Office of Graduate Programs[-]Office of International Programs[-]Office of Online Programs[-]Office of School and Community Experiences[-]Office of Undergraduate Programs" query compact></ilw-filter-checkboxessimple>
+    </ilw-filter>
+    <section id="ilw-directory-results" aria-label="Directory Results"></section>
+</div>
+</body>
+
+</html>
