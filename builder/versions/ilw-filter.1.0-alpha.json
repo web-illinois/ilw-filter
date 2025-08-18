@@ -6,7 +6,7 @@
     "element-name": "ilw-filter",
     "description": "Description for builder.",
     "builder-version": "1.0-alpha",
-    "version": "1.0.0-alpha",
+    "version": "1.0.0-alpha2",
     "date": "03/29/2025",
     "css": "https://dev.toolkit.illinois.edu/ilw-filter/1.0.0-alpha/ilw-filter.css",
     "js": "https://dev.toolkit.illinois.edu/ilw-filter/1.0.0-alpha/ilw-filter.js",

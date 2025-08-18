@@ -57,8 +57,8 @@ jobs:
 
       # Run this to get the axe report
       # This only uses Chrome, so it doesn't have to run the full Playwright install
-      - name: Run Playwright tests
-        run: npm run test:axe
+      - name: Run axe-core tests
+        run: npm run test:axe:github
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
