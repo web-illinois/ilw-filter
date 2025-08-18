@@ -6,7 +6,7 @@ export default defineConfig({
             enabled: true,
             provider: "playwright",
             // https://vitest.dev/guide/browser/playwright
-            instances: [{ browser: "firefox" }],
+            instances: [{ browser: "chromium" }, { browser: "firefox" }, { browser: "webkit" }],
         },
         exclude: [
             "**/node_modules/**",

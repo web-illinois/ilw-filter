@@ -56,8 +56,7 @@ jobs:
       - run: npm run-script build
 
       # Run this to get the axe report
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      # This only uses Chrome, so it doesn't have to run the full Playwright install
       - name: Run Playwright tests
         run: npm run test:axe
 
