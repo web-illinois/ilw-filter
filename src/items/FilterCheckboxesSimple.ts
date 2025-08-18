@@ -69,7 +69,7 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     renderCheckbox(textitem: string | [string, string], i: number) {
         const value = typeof textitem === "string" ? textitem : textitem[0];
         const label = typeof textitem === "string" ? textitem : textitem[1];
-        let isChecked = this.value?.includes(value);
+        let isChecked = !!this.value?.includes(value);
         return html`
             <div class="checkbox">
                 <input
