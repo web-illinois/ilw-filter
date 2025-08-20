@@ -1,0 +1,40 @@
+{
+    "title": "Filter",
+    "tag": "ilw-filter",
+    "github": "https://github.com/web-illinois/ilw-filter/",
+    "type": "web component",
+    "element-name": "ilw-filter",
+    "description": "Used to generate a filter to display information.",
+    "builder-version": "1.0",
+    "version": "1.0.0",
+    "date": "08/20/2025",
+    "css": "https://dev.toolkit.illinois.edu/ilw-filter/1.0.0/ilw-filter.css",
+    "js": "https://dev.toolkit.illinois.edu/ilw-filter/1.0.0/ilw-filter.js",
+    "production": true,
+    "notes": "",
+    "parent-style": "",
+    "samples": [
+        {
+            "name": "default",
+            "description": "Default information",
+            "text": "<h2 slot='heading'>Filter by</h2><ilw-filter-search label='Dep' placeholder='Search for a department' name='department'> </ilw-filter-search> <ilw-filter-search label='Course' query placeholder='Search for a course' name='course'></ilw-filter-search>"
+        }
+    ],
+    "attributes-fixed": [],
+    "attributes-text": [],
+    "attributes": [
+        {
+            "name": "toggle",
+            "description": "Toggle Option",
+            "depreciated": false,
+            "values": [
+                "",
+                "true"
+            ]
+        }
+    ],
+    "classes-fixed": [],
+    "classes": [],
+    "css-variables": [
+    ]
+}

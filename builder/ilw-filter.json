@@ -4,9 +4,9 @@
     "github": "https://github.com/web-illinois/ilw-filter/",
     "type": "web component",
     "element-name": "ilw-filter",
-    "description": "Description for builder.",
-    "purpose": "Imperative mood purpose for builder homepage.",
-    "toolkit-version": "",
-    "production-version": "",
-    "development-version": "1.0-alpha"
+    "description": "Used to generate a filter to display information.",
+    "purpose": "Create a filter for an application",
+    "toolkit-version": "1.0",
+    "production-version": "1.0",
+    "development-version": "1.0"
 }
