@@ -4,10 +4,11 @@ import "./items/FilterHidden";
 import "./items/FilterCheckboxesSimple";
 import "./items/FilterDropdownSimple";
 
-export * from "./Filter";
 export * from "./FilterContext";
-export * from "./items/FilterCheckboxesSimple";
-export * from "./items/FilterDropdownSimple";
-export * from "./items/FilterHidden";
-export * from "./items/FilterItem";
-export * from "./items/FilterSearch";
+export * from "./items/FilterItem"
+
+export { default as Filter } from "./Filter";
+export { default as FilterSearch } from "./items/FilterSearch";
+export { default as FilterHidden } from "./items/FilterHidden";
+export { default as FilterCheckboxesSimple } from "./items/FilterCheckboxesSimple";
+export { default as FilterDropdownSimple } from "./items/FilterDropdownSimple";
