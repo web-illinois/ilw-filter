@@ -13,8 +13,7 @@ export default defineConfig({
         },
         rollupOptions: {
             output: {
-                assetFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === "style.css") return "ilw-filter.css";
+                assetFileNames: () => {
                     return "[name][extname]";
                 },
             },
