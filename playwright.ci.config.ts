@@ -13,6 +13,7 @@ export default defineConfig({
             name: 'chromium',
             use: {
                 ...devices['Desktop Chrome'],
+                // GitHub Actions have chrome pre-installed, so we use that channel
                 channel: 'chrome',
             },
         },
