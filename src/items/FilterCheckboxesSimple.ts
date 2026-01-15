@@ -26,6 +26,11 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     })
     allValues: (string | [string, string])[] | undefined = undefined;
 
+    @property({
+        useDefault: true,
+    })
+    toggles: boolean = false;
+
     @queryAll("input")
     inputs!: NodeListOf<HTMLInputElement>;
 
@@ -70,18 +75,39 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
         const value = typeof textitem === "string" ? textitem : textitem[0];
         const label = typeof textitem === "string" ? textitem : textitem[1];
         let isChecked = !!this.value?.includes(value);
-        return html`
-            <div class="checkbox">
-                <input
-                    type="checkbox"
-                    id="${this.id + i}"
-                    value="${value}"
-                    @input=${this.valueUpdateListener}
-                    .checked=${isChecked}
-                />
-                <label for="${this.id + i}">${label}</label>
-            </div>
-        `;
+        if (this.toggles) {
+            return html`
+                <div class="checkbox">
+                    <div class="toggle-slider">
+                        <input
+                            type="checkbox"
+                            id="${this.id + i}"
+                            value="${value}"
+                            @input=${this.valueUpdateListener}
+                            .checked=${isChecked}
+                            role="switch"
+                        />
+                        <span>
+                            <span class="toggle-container"></span>
+                        </span>
+                    </div>
+                    <label class="toggle-slider-label" for="${this.id + i}">${label}</label>
+                </div>
+            `;
+        } else {
+            return html`
+                <div class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="${this.id + i}"
+                        value="${value}"
+                        @input=${this.valueUpdateListener}
+                        .checked=${isChecked}
+                    />
+                    <label for="${this.id + i}">${label}</label>
+                </div>
+            `;
+        }
     }
 
     renderChevron() {

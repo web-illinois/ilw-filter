@@ -79,3 +79,73 @@ label {
     margin: 0;
     cursor: pointer;
 }
+
+label.toggle-slider-label {
+    padding-left: 5px;
+}
+
+.toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin-bottom: 10px;
+}
+
+.toggle-slider input[type="checkbox"] {
+  z-index: 10;
+  position: relative;
+  color: transparent;
+  width: 60px;
+  height: 28px;
+  background: transparent;
+  border: transparent;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toggle-slider > span .toggle-container {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--il-storm-lighter-1);
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+.toggle-slider > span .toggle-container:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #FFF;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.toggle-slider input:checked + span .toggle-container:before {
+  transform: translateX(26px);
+}
+
+.toggle-slider input:focus + span span {
+  outline: 3px solid var(--il-blue);
+}
+
+.toggle-slider input:checked + span .toggle-container {
+  background-color: var(--il-altgeld);
+}
+
+.toggle-slider input:focus-visible + span .toggle-container {
+    background-color: var(--ilw-link--focus-background-color);
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .toggle-slider span, .toggle-slider span:before {
+    transition: none;
+  }
+}
