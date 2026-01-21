@@ -77,13 +77,15 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
         let isChecked = !!this.value?.includes(value);
         if (this.toggles) {
             return html`
-                <div class="checkbox">
+                <div class="toggle">
                     <div class="toggle-slider">
                         <input
                             type="checkbox"
                             id="${this.id + i}"
                             value="${value}"
                             @input=${this.valueUpdateListener}
+                            @focus=${this.focusToggle}
+                            @blur=${this.blurToggle}
                             .checked=${isChecked}
                             role="switch"
                         />
@@ -123,6 +125,16 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
 
     readonly toggleListener = () => {
         this.context?.triggerLayoutUpdate();
+    }
+
+    focusToggle(event: Event) {
+        const target = event.target as HTMLElement;
+        target?.parentElement?.parentElement?.classList.add('togglefocus');
+    }
+
+    blurToggle(event: Event) {
+        const target = event.target as HTMLElement;
+        target?.parentElement?.parentElement?.classList.remove('togglefocus');
     }
 
     firstUpdated() {
