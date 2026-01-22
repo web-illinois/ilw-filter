@@ -6,7 +6,7 @@
     "element-name": "ilw-filter",
     "description": "Used to generate a filter to display information.",
     "purpose": "Create a filter for an application",
-    "toolkit-version": "1.0",
-    "production-version": "1.0",
+    "toolkit-version": "1.1",
+    "production-version": "1.1",
     "development-version": "1.0"
 }

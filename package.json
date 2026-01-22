@@ -1,6 +1,6 @@
 {
     "name": "@illinois-toolkit/ilw-filter",
-    "description": "One paragraph description of the component.",
+    "description": "Used to generate a filter to display information.",
     "repository": "github:web-illinois/ilw-filter",
     "private": false,
     "license": "MIT",
