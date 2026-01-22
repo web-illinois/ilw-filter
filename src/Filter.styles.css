@@ -51,8 +51,8 @@ div.line {
             outline: none;
         }
         &:focus-visible {
-            outline: 2px solid var(--ilw-button--focused-border-color);
-            background: var(--ilw-link--focus-background-color);
+            background-color: var(--ilw-color--focus--background);
+            outline: 2px solid var(--ilw-color--focus--outline);
         }
         .slider-box {
             display: flex;
@@ -68,7 +68,7 @@ div.line {
         }
         &:focus {
             .slider-box {
-                outline: 2px solid var(--ilw-button--focused-border-color);
+                outline: 2px solid var(--ilw-color--focus--outline);
             }
         }
         .slider-toggle {
@@ -97,9 +97,9 @@ div.line {
 }
 
 button {
-    background-color: var(--ilw-button--background-color);
-    color: var(--ilw-button--foreground-color);
-    border: 2px solid var(--ilw-button--border-color);
+    background: var(--ilw-color--control);
+    color: var(--ilw-color--control-text);
+    border: 2px solid var(--ilw-color--control-text);
     font: 700 1.188rem / 1.25rem var(--il-font-sans);
     display: inline-block;
     margin: 6px 0;
@@ -115,30 +115,24 @@ button {
 
 button:visited {
     outline: 0;
-    background-color: var(--ilw-button--background-color);
-    color: var(--ilw-button--foreground-color);
-    border: 2px solid var(--ilw-button--border-color);
+    background: var(--ilw-color--control);
+    color: var(--ilw-color--control-text);
+    border: 2px solid var(--ilw-color--control-text);
 }
 
 button:hover {
     outline: 0;
-    background-color: var(--ilw-button--focused-background-color);
-    color: var(--ilw-button--focused-foreground-color);
-    border-color: var(--ilw-button--focused-border-color);
+    background: var(--ilw-color--control-text);
+    color: var(--ilw-color--control);
+    border: 2px solid var(--ilw-color--control-text);
     text-decoration: underline;
 }
 button:focus {
-    background-color: var(--ilw-link--focus-background-color);
-    color: var(--ilw-link--focus-color);
-    border-color: var(--ilw-link--focus-color);
+    background-color: var(--ilw-color--focus--background);
+    color: var(--ilw-color--focus--text);
+    border-color: var(--ilw-color--focus--text);
     text-decoration: underline;
-    outline: var(--ilw-link--focus-outline);
-}
-button:active {
-    background-color: var(--ilw-button--active-background-color);
-    color: var(--ilw-button--active-color);
-    border-color: var(--ilw-button--active-border-color);
-    outline: solid var(--ilw-button--active-border-color) 2px;
+    outline: var(--ilw-color--focus--outline);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {

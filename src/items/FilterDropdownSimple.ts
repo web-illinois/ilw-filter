@@ -19,7 +19,9 @@ export default class FilterDropdownSimple extends FilterItem<string> {
     @property()
     hideLabel = false;
 
-    @property({ reflect: true, useDefault: true })
+    @property({ 
+        reflect: true, 
+        useDefault: true })
     value: string | undefined = undefined;
 
     @property({
@@ -62,7 +64,7 @@ export default class FilterDropdownSimple extends FilterItem<string> {
                     ${this.allValues?.map(item => {
                         const value = typeof item === 'string' ? item : item[0];
                         const label = typeof item === 'string' ? item : item[1];
-                        return html`<option value="${value}">${label}</option>`;
+                        return html`<option ?selected="${this.value === value}" value="${value}">${label}</option>`;
                     })}
                 </select>
             </div>

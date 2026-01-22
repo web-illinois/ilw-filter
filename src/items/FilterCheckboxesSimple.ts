@@ -26,6 +26,11 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
     })
     allValues: (string | [string, string])[] | undefined = undefined;
 
+    @property({
+        useDefault: true,
+    })
+    toggles: boolean = false;
+
     @queryAll("input")
     inputs!: NodeListOf<HTMLInputElement>;
 
@@ -70,18 +75,41 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
         const value = typeof textitem === "string" ? textitem : textitem[0];
         const label = typeof textitem === "string" ? textitem : textitem[1];
         let isChecked = !!this.value?.includes(value);
-        return html`
-            <div class="checkbox">
-                <input
-                    type="checkbox"
-                    id="${this.id + i}"
-                    value="${value}"
-                    @input=${this.valueUpdateListener}
-                    .checked=${isChecked}
-                />
-                <label for="${this.id + i}">${label}</label>
-            </div>
-        `;
+        if (this.toggles) {
+            return html`
+                <div class="toggle">
+                    <div class="toggle-slider">
+                        <input
+                            type="checkbox"
+                            id="${this.id + i}"
+                            value="${value}"
+                            @input=${this.valueUpdateListener}
+                            @focus=${this.focusToggle}
+                            @blur=${this.blurToggle}
+                            .checked=${isChecked}
+                            role="switch"
+                        />
+                        <span>
+                            <span class="toggle-container"></span>
+                        </span>
+                    </div>
+                    <label class="toggle-slider-label" for="${this.id + i}">${label}</label>
+                </div>
+            `;
+        } else {
+            return html`
+                <div class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="${this.id + i}"
+                        value="${value}"
+                        @input=${this.valueUpdateListener}
+                        .checked=${isChecked}
+                    />
+                    <label for="${this.id + i}">${label}</label>
+                </div>
+            `;
+        }
     }
 
     renderChevron() {
@@ -97,6 +125,16 @@ export default class FilterCheckboxesSimple extends FilterItem<string> {
 
     readonly toggleListener = () => {
         this.context?.triggerLayoutUpdate();
+    }
+
+    focusToggle(event: Event) {
+        const target = event.target as HTMLElement;
+        target?.parentElement?.parentElement?.classList.add('togglefocus');
+    }
+
+    blurToggle(event: Event) {
+        const target = event.target as HTMLElement;
+        target?.parentElement?.parentElement?.classList.remove('togglefocus');
     }
 
     firstUpdated() {
