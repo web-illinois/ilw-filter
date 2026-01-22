@@ -59,11 +59,13 @@ div.toggle {
     align-items: start;
     position: relative;
     margin-bottom: 10px;
+    padding: 2px 0 0 2px;
 }
 
 div.toggle.togglefocus {
     background-color: var(--ilw-link--focus-background-color);
     box-shadow: 0 0 0 3px var(--ilw-link--focus-background-color);
+    outline: 2px solid var(--ilw-color--focus--outline);
 }
 
 .group {
