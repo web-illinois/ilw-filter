@@ -20,6 +20,12 @@ input {
     width: var(--ilw-filter--width);
     background-clip: padding-box;
     background-size: 21px;
+    background-color: white;
+}
+
+input:focus {
+    background-color: var(--il-storm-lighter-4);
+    outline: 3px solid var(--il-altgeld);
 }
 
 label.hidden {
