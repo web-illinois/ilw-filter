@@ -5,9 +5,6 @@
     }
 }
 
-:host {
-}
-
 div {
     width: var(--ilw-filter--width);
 }
@@ -23,9 +20,13 @@ input {
     background-color: white;
 }
 
+input::placeholder {
+    font-style: italic;
+    color: var(--il-storm)
+}
+
 input:focus {
-    background-color: var(--il-storm-lighter-4);
-    outline: 3px solid var(--il-altgeld);
+    outline: var(--ilw-link--focus-outline);
 }
 
 label.hidden {
