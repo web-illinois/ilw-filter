@@ -5,9 +5,6 @@
     }
 }
 
-:host {
-}
-
 div {
     width: var(--ilw-filter--width);
 }
@@ -20,6 +17,16 @@ input {
     width: var(--ilw-filter--width);
     background-clip: padding-box;
     background-size: 21px;
+    background-color: white;
+}
+
+input::placeholder {
+    font-style: italic;
+    color: var(--il-storm)
+}
+
+input:focus {
+    outline: var(--ilw-link--focus-outline);
 }
 
 label.hidden {
